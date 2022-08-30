@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('rate');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('tax_id')->references('id')->on('taxes');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
