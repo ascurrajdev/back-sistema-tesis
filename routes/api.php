@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Clients\ReservationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,7 +21,12 @@ Route::prefix("clients")->name("api.clients.")->group(function(){
     Route::post("login",[LoginController::class,"loginClient"])->name("login");
     Route::post("register",[RegisterController::class,"registerClient"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
-        Route::get("user",);
+        Route::prefix("reservations")->name("reservations.")->group(function(){
+            Route::get("",[ReservationController::class,"index"])->name("index");
+            Route::post("",[ReservationController::class,"store"])->name("store");
+            Route::get("{reservation}",[ReservationController::class,"view"])->name("view");
+            Route::put("{reservation}",[ReservationController::class,"update"])->name("update");
+        });
     });
 });
 Route::prefix("users")->name("api.users.")->group(function(){
@@ -28,4 +35,8 @@ Route::prefix("users")->name("api.users.")->group(function(){
     Route::middleware("auth:sanctum")->group(function(){
 
     });
+});
+Route::any("/",function(){
+    Log::info(request()->all());
+    return request()->all();
 });

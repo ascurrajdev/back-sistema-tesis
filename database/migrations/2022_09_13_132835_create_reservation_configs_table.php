@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('currencies', function (Blueprint $table) {
+        Schema::create('budget_configs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('currency_format',5);
-            $table->unsignedBigInteger('currency_quote_id')->nullable();
-            $table->double('currency_quote_price',12,3)->nullable()->default(1);
-            $table->integer('decimals');
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('currencies');
+        Schema::dropIfExists('budget_configs');
     }
 };

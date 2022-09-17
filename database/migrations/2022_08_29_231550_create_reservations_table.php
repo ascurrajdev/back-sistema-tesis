@@ -21,12 +21,13 @@ return new class extends Migration
             $table->double('total_amount',12,3);
             $table->unsignedBigInteger('currency_id');
             $table->double('total_discount',12,3);
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->unsignedBigInteger('agency_id');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('agency_id')->references('id')->on('agencies');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->boolean('active')->default(false);
+            $table->enum("status", ["pending","reserved","cancelled","completed"])->default("pending");
             $table->timestamps();
         });
     }

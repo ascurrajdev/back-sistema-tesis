@@ -6,4 +6,10 @@ trait ResponseTrait{
             "data" => $message
         ],$code);
     }
+    public function error($message, $code){
+        return response()->json([
+            "message" => $message,
+            'code' => $code
+        ],$code);
+    }
 }
