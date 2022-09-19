@@ -2,5 +2,5 @@
 namespace App\Contracts;
 interface PaymentService{
     public function createLinkPayment($amount,$description);
-    public function makeReversePayment();
+    public function makeReversePayment($paymentId);
 }
