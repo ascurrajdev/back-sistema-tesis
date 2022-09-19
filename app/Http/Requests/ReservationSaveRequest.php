@@ -26,7 +26,9 @@ class ReservationSaveRequest extends FormRequest
         return [
             'date_from' => ['required','before_or_equal:date_to'],
             'date_to' => ['required','after_or_equal:date_from'],
-            "notes" => ["string"]
+            "notes" => ["string"],
+            "details.*.product_id" => ["required","exists:products,id"],
+            "details.*.quantity" => ["required"]
         ];
     }
 }

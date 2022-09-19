@@ -25,6 +25,7 @@ class AgencyFactory extends Factory
             'address' => fake()->address(),
             'neighborhood' => fake()->city(),
             "user_id" => User::factory(),
+            'active_for_reservations_online' => true,
         ];
     }
 }

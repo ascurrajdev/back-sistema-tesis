@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Agency;
 use App\Models\Client;
 use App\Models\Currency;
+use App\Models\Product;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -31,6 +32,7 @@ class CreateReservationsTest extends TestCase
     {
         Agency::factory()->create();
         Currency::factory()->create();
+        Product::factory()->create();
         Sanctum::actingAs(
             Client::factory()->create(),
             ["*"]
@@ -38,8 +40,15 @@ class CreateReservationsTest extends TestCase
         $response = $this->postJson(route("api.clients.reservations.store"),[
             "date_from" => "2015-01-01",
             "date_to" => "2015-01-06",
-            "notes" => "Hola"
+            "notes" => "Hola",
+            "details" => [
+                [
+                    "product_id" => 1,
+                    "quantity" => 1,
+                ]
+            ]
         ]);
         $response->assertCreated();
+        $this->assertDatabaseCount("reservation_details",1);
     }
 }

@@ -19,9 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('reservation_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('currency_id');
-            $table->unsignedBigInteger('product_pricing_profile_id');
+            $table->unsignedBigInteger('product_pricing_profile_id')->nullable();
             $table->double('amount',12,3);
-            $table->double('discount',12,3);
+            $table->double('discount',12,3)->default(0);
+            $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('reservation_id')->references('id')->on('reservations');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('product_pricing_profile_id')->references('id')->on('product_pricing_profiles');

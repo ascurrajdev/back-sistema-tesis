@@ -21,6 +21,7 @@ class CurrencyFactory extends Factory
             'name' => 'Guarani',
             'currency_format' => 'Gs',
             'decimals' => 0,
+            'default' => true,
         ];
     }
 }

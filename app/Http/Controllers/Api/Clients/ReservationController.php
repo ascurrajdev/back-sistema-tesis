@@ -1,6 +1,10 @@
 <?php
 namespace App\Http\Controllers\Api\Clients;
 use App\Models\Reservation;
+use App\Models\ReservationDetail;
+use App\Models\Product;
+use App\Models\Currency;
+use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
@@ -21,16 +25,39 @@ class ReservationController extends Controller{
 
     public function store(ReservationSaveRequest $request){
         $params = $request->validated();
-        $reservation = Reservation::create([
+        $currency = Currency::firstWhere("default",true);
+        $agency = Agency::firstWhere("active_for_reservations_online",true);
+        $reservationArray = [
             "client_id" => $request->user()->id,
             "date_from" => $params["date_from"],
             "date_to" => $params["date_to"],
             "total_amount" => 0,
             "total_discount" => 0,
             "notes" => $params["notes"] ?? "",
-            "currency_id" => 1,
-            "agency_id" => 1,
-        ]);
+            "currency_id" => $currency->id,
+            "agency_id" => $agency->id,
+        ];
+        $productIds = collect($params["details"])->map(function($value){ 
+            return $value["product_id"];
+        })->all();
+        $products = Product::whereIn("id",$productIds)->get();
+        foreach($params["details"] as $key => $detail){
+            $productSelected = $products->where("id",$detail["product_id"])->first();
+            $params["details"][$key]["amount"] = $productSelected->amount;
+            $params["details"][$key]["discount"] = 0;
+            $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
+        }
+        $reservation = Reservation::create($reservationArray);
+        ReservationDetail::insert(collect($params["details"])->map(function($value) use ($reservation){ 
+            return [
+                "reservation_id" => $reservation->id,
+                "amount" => $value["amount"],
+                "discount" => $value["discount"],
+                "quantity" => $value["quantity"],
+                "product_id" => $value["product_id"],
+                "currency_id" => $reservation->currency_id,
+            ];
+        })->all());
         return new ReservationResource($reservation);
     }
 

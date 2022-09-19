@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('currency_quote_id')->nullable();
             $table->double('currency_quote_price',12,3)->nullable()->default(1);
             $table->integer('decimals');
+            $table->boolean("default")->nullable();
             $table->timestamps();
         });
     }
