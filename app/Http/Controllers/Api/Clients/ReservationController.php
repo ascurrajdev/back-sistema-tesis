@@ -36,6 +36,7 @@ class ReservationController extends Controller{
             "notes" => $params["notes"] ?? "",
             "currency_id" => $currency->id,
             "agency_id" => $agency->id,
+            'quantity_people' => 0,
         ];
         $productIds = collect($params["details"])->map(function($value){ 
             return $value["product_id"];
@@ -43,6 +44,9 @@ class ReservationController extends Controller{
         $products = Product::whereIn("id",$productIds)->get();
         foreach($params["details"] as $key => $detail){
             $productSelected = $products->where("id",$detail["product_id"])->first();
+            if($productSelected->is_lodging){
+                $reservationArray['quantity_people'] += $detail['quantity'];
+            }
             $params["details"][$key]["amount"] = $productSelected->amount;
             $params["details"][$key]["discount"] = 0;
             $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
@@ -59,6 +63,10 @@ class ReservationController extends Controller{
             ];
         })->all());
         return new ReservationResource($reservation);
+    }
+
+    public function unavailable(){
+        
     }
 
     public function view(Reservation $reservation, Request $request){

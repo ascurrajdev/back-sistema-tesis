@@ -7,6 +7,7 @@ use App\Models\Agency;
 use App\Models\Client;
 use App\Models\Currency;
 use App\Models\Product;
+use App\Models\ReservationLimit;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -50,5 +51,6 @@ class CreateReservationsTest extends TestCase
         ]);
         $response->assertCreated();
         $this->assertDatabaseCount("reservation_details",1);
+        $this->assertDatabaseCount("reservation_limits",6);
     }
 }

@@ -24,6 +24,9 @@ return new class extends Migration
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('tax_id')->references('id')->on('taxes');
             $table->boolean('active_for_reservation')->default(false);
+            $table->boolean('is_lodging')->default(false);
+            $table->integer('capacity_for_day_max')->nullable()->default(0);
+            $table->integer('capacity_for_day_min')->nullable()->default(0);
             $table->boolean('stockable')->default(false);
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

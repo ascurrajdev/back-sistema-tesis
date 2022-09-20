@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');
-            $table->datetime('date_from');
-            $table->datetime('date_to');
+            $table->date('date_from');
+            $table->date('date_to');
             $table->double('total_amount',12,3);
             $table->unsignedBigInteger('currency_id');
             $table->double('total_discount',12,3);
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('agency_id');
+            $table->integer('quantity_people')->default(0);
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('agency_id')->references('id')->on('agencies');
             $table->foreign('client_id')->references('id')->on('clients');

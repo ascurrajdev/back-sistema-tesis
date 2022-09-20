@@ -26,7 +26,10 @@ class ProductFactory extends Factory
             'currency_id' => Currency::factory(),
             'user_id' => User::factory(),
             'active_for_reservation' => true,
-            'stockable' => false
+            'stockable' => false,
+            'is_lodging' => true,
+            'capacity_for_day_max' => 10,
+            'capacity_for_day_min' => 1,
         ];
     }
 }
