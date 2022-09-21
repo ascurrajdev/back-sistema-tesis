@@ -15,7 +15,6 @@ class ModelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        ReservationDetail::observe(ReservationDetailObserver::class);
     }
 
     /**
@@ -25,6 +24,6 @@ class ModelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // ReservationDetail::observe(ReservationDetailObserver::class);
     }
 }

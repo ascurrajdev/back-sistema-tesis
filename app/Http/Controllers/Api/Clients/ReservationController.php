@@ -52,16 +52,16 @@ class ReservationController extends Controller{
             $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
         }
         $reservation = Reservation::create($reservationArray);
-        ReservationDetail::insert(collect($params["details"])->map(function($value) use ($reservation){ 
-            return [
+        foreach($params["details"] as $value){
+            ReservationDetail::create([
                 "reservation_id" => $reservation->id,
                 "amount" => $value["amount"],
                 "discount" => $value["discount"],
                 "quantity" => $value["quantity"],
                 "product_id" => $value["product_id"],
                 "currency_id" => $reservation->currency_id,
-            ];
-        })->all());
+            ]);
+        };
         return new ReservationResource($reservation);
     }
 

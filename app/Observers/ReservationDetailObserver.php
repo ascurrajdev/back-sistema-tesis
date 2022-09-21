@@ -4,9 +4,11 @@ namespace App\Observers;
 
 use App\Models\ReservationDetail;
 use App\Models\ReservationLimit;
+use Illuminate\Support\Facades\Log;
 
 class ReservationDetailObserver
 {
+    public $afterCommit = true;
     /**
      * Handle the ReservationDetail "created" event.
      *
@@ -15,6 +17,7 @@ class ReservationDetailObserver
      */
     public function created(ReservationDetail $reservationDetail)
     {
+        Log::info("Se activo el observador");
         $reservationDetail->load(['reservation','product']);
         if(!empty($reservationDetail->product->is_lodging)){
             $reservation = $reservationDetail->reservation;
@@ -22,7 +25,6 @@ class ReservationDetailObserver
             $reservationLimits = ReservationLimit::whereIn('date',$intervalArray)->get();
             $reservationLimitsArray = array();
             foreach($intervalArray as $date){
-                $date = $date->format('Y-m-d');
                 $reservationLimit = array();
                 $reservationSelected = $reservationLimits->where('date',$date)->where('product_id',$reservationDetail->product_id)->first();
                 if(empty($reservationSelected)){
@@ -31,12 +33,13 @@ class ReservationDetailObserver
                     $reservationLimit['available'] = $reservationDetail->product->capacity_for_day_max - $reservationDetail->quantity;
                 }else{
                     $reservationLimit['available'] -= $reservationDetail->quantity;
+                    $reservationLimit['id'] -= $reservationDetail->id;
                 }
                 $reservationLimit['date'] = $date;
                 $reservationLimit['product_id'] = $reservationDetail->product_id;
                 $reservationLimitsArray[] = $reservationLimit;
             }
-            ReservationLimit::upsert($reservationLimitsArray,["product_id","date"],['available']);
+            ReservationLimit::upsert($reservationLimitsArray,["id"],['available']);
         }
     }
 
