@@ -12,7 +12,7 @@ use App\Models\Currency;
  */
 class ReservationFactory extends Factory
 {
-    protected $mode = Reservation::class;
+    protected $model = Reservation::class;
     /**
      * Define the model's default state.
      *

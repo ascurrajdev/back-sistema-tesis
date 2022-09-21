@@ -27,7 +27,7 @@ Route::prefix("clients")->name("api.clients.")->group(function(){
         Route::put("",[ClientController::class,"update"])->name('update');
         Route::get("",[ClientController::class,"getUser"]);
         Route::prefix("reservations")->name("reservations.")->group(function(){
-            Route::get("unavailable",[ReservationController::class])->name("unavailable");
+            Route::get("availabilities",[ReservationController::class,"availabilities"])->name("availabilities");
             Route::get("",[ReservationController::class,"index"])->name("index");
             Route::post("",[ReservationController::class,"store"])->name("store");
             Route::get("{reservation}",[ReservationController::class,"view"])->name("view");

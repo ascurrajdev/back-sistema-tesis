@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\Clients;
 use App\Models\Reservation;
 use App\Models\ReservationDetail;
+use App\Models\ReservationLimit;
 use App\Models\Product;
 use App\Models\Currency;
 use App\Models\Agency;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReservationResource;
+use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
 
 class ReservationController extends Controller{
@@ -65,8 +67,8 @@ class ReservationController extends Controller{
         return new ReservationResource($reservation);
     }
 
-    public function unavailable(){
-        
+    public function availabilities(){
+        return ReservationLimitResource::collection(ReservationLimit::orderBy('date','desc')->get());
     }
 
     public function view(Reservation $reservation, Request $request){
