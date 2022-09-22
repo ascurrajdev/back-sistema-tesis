@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
+use App\Http\Controllers\Api\Users\ProductsController;
 use App\Models\ReservationConfig;
 
 /*
@@ -39,10 +40,10 @@ Route::prefix("users")->name("api.users.")->group(function(){
     Route::post("login",[LoginController::class,"loginUser"])->name("login");
     Route::post("register",[RegisterController::class,"registerUser"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
-
+        Route::prefix('products')->name('products.')->group(function(){
+            Route::get('',[ProductsController::class,'index'])->name('index')->middleware('ability:products-index');
+            Route::get('{product}',[ProductsController::class,'view'])->name('view')->middleware('ability:products-view');
+            Route::post('',[ProductsController::class,'store'])->name('store');
+        });
     });
-});
-Route::any("/",function(){
-    Log::info(request()->all());
-    return request()->all();
 });

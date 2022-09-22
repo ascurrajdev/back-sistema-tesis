@@ -29,6 +29,7 @@ return new class extends Migration
             $table->integer('capacity_for_day_min')->nullable()->default(0);
             $table->boolean('stockable')->default(false);
             $table->foreign('user_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
