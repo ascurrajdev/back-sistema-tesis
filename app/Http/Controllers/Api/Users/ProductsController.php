@@ -8,10 +8,12 @@ use App\Http\Requests\ProductUpdateRequest;
 
 class ProductsController extends Controller{
     public function index(){
+        $this->authorize("viewAny",Product::class);
         return Product::paginate();
     }
 
     public function view(Product $product){
+        $this->authorize("view",$product);
         return new ProductResource($product);
     }
 
@@ -41,6 +43,7 @@ class ProductsController extends Controller{
     }
 
     public function delete(Product $product){
+        $this->authorize('delete',$product);
         $product->delete();
         return new ProductResource($product);
     }

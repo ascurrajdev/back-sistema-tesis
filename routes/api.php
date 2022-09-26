@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
 use App\Http\Controllers\Api\Users\ProductsController;
+use App\Http\Controllers\Api\Users\RolesUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,11 +39,18 @@ Route::prefix("users")->name("api.users.")->group(function(){
     Route::post("register",[RegisterController::class,"registerUser"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
         Route::prefix('products')->name('products.')->group(function(){
-            Route::get('',[ProductsController::class,'index'])->name('index')->middleware('ability:products-index');
-            Route::get('{product}',[ProductsController::class,'view'])->name('view')->middleware('ability:products-view');
+            Route::get('',[ProductsController::class,'index'])->name('index');
+            Route::get('{product}',[ProductsController::class,'view'])->name('view');
             Route::post('',[ProductsController::class,'store'])->name('store');
             Route::put('{product}',[ProductsController::class,'update'])->name('update');
-            Route::delete('{product}',[ProductsController::class,'delete'])->name('delete')->middleware('ability:products-delete');
+            Route::delete('{product}',[ProductsController::class,'delete'])->name('delete');
+        });
+        Route::prefix('roles')->name('roles.')->group(function(){
+            Route::get('',[RolesUserController::class,'index'])->name('index');
+            Route::get('{role}',[RolesUserController::class,'view'])->name('view');
+            Route::post('',[RolesUserController::class,'store'])->name('store');
+            Route::put('{role}',[RolesUserController::class,'update'])->name('update');
+            Route::delete('{role}',[RolesUserController::class,'delete'])->name('delete');
         });
     });
 });
