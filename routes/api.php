@@ -1,14 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
 use App\Http\Controllers\Api\Users\ProductsController;
-use App\Models\ReservationConfig;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +41,8 @@ Route::prefix("users")->name("api.users.")->group(function(){
             Route::get('',[ProductsController::class,'index'])->name('index')->middleware('ability:products-index');
             Route::get('{product}',[ProductsController::class,'view'])->name('view')->middleware('ability:products-view');
             Route::post('',[ProductsController::class,'store'])->name('store');
+            Route::put('{product}',[ProductsController::class,'update'])->name('update');
+            Route::delete('{product}',[ProductsController::class,'delete'])->name('delete')->middleware('ability:products-delete');
         });
     });
 });

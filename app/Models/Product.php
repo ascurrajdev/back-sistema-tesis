@@ -10,7 +10,12 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
     public function pricingProfile(){
         return $this->belongsTo(ProductPricingProfile::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

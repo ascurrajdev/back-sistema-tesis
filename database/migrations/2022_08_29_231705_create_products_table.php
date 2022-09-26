@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('amount',12,3);
             $table->double('amount_untaxed',12,3);
             $table->unsignedBigInteger('tax_id')->nullable();
+            $table->double('tax_rate')->nullable();
             $table->unsignedBigInteger('currency_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('currency_id')->references('id')->on('currencies');

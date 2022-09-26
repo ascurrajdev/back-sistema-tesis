@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\ReservationDetail;
+use App\Models\Product;
 use App\Observers\ReservationDetailObserver;
+use App\Observers\ProductObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
@@ -25,5 +27,6 @@ class ModelServiceProvider extends ServiceProvider
     public function boot()
     {
         ReservationDetail::observe(ReservationDetailObserver::class);
+        Product::observe(ProductObserver::class);
     }
 }

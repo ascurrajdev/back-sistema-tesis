@@ -24,7 +24,15 @@ class ProductUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "name" => ['string','min:3'],
+            'amount' => ['numeric'],
+            'tax_id' => ['exists:taxes,id'],
+            'currency_id' => ['exists:currencies,id'],
+            'active_for_reservation' => ['boolean'],
+            'is_lodging' => ['boolean'],
+            'capacity_for_day_max' => ['numeric'],
+            'capacity_for_day_min' => ['numeric'],
+            'stockable' => ['boolean']
         ];
     }
 }

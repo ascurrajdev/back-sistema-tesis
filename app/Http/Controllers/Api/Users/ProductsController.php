@@ -21,14 +21,14 @@ class ProductsController extends Controller{
             "name" => $params['name'],
             'amount' => $params['amount'],
             'amount_untaxed' => 0,
-            'tax_id' => $params['tax_id'],
+            'tax_id' => $params['tax_id'] ?? null,
             'currency_id' => $params['currency_id'],
             'user_id' => $request->user()->id,
             'active_for_reservation' => $params['active_for_reservation'],
             'is_lodging' => $params['is_lodging'],
             'capacity_for_day_max' => $params['capacity_for_day_max'],
             'capacity_for_day_min' => $params['capacity_for_day_min'],
-            'stockable' => $params['stockable']
+            'stockable' => $params['stockable'] ?? false,
         ]));
         return new ProductResource($product);
     }
@@ -36,6 +36,7 @@ class ProductsController extends Controller{
     public function update(Product $product,ProductUpdateRequest $request){
         $params = $request->validated();
         $product->fill(array_filter($params));
+        $product->save();
         return new ProductResource($product);
     }
 
