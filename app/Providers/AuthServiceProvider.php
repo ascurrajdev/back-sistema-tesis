@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use App\Models\Client;
 use App\Models\User;
 use App\Policies\ProductPolicy;
+use App\Policies\UserPolicy;
 use App\Policies\RoleUserPolicy;
 use App\Policies\ReservationPolicy;
 class AuthServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         Client::class => ReservationPolicy::class,
         User::class => ProductPolicy::class,
         User::class => RoleUserPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

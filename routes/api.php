@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
 use App\Http\Controllers\Api\Users\ProductsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
+use App\Http\Controllers\Api\Users\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,5 +53,10 @@ Route::prefix("users")->name("api.users.")->group(function(){
             Route::put('{role}',[RolesUserController::class,'update'])->name('update');
             Route::delete('{role}',[RolesUserController::class,'delete'])->name('delete');
         });
+        Route::get('',[UsersController::class,'index'])->name('index');
+        Route::get('{user}',[UsersController::class,'view'])->name('view');
+        Route::post('',[UsersController::class,'store'])->name('store');
+        Route::put('{user}',[UsersController::class,'update'])->name('update');
+        Route::delete('{user}',[UsersController::class,'delete'])->name('delete');
     });
 });
