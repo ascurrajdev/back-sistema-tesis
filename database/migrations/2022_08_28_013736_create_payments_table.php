@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_card');
+            $table->enum('type_card',['credit','debit']);
+            $table->boolean('is_cash');
+            $table->boolean('is_transfer_bank');
             $table->timestamps();
         });
     }
