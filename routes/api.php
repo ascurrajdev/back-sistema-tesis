@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
+use App\Http\Controllers\Api\Users\PaymentsController;
 use App\Http\Controllers\Api\Users\ProductsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
 use App\Http\Controllers\Api\Users\UsersController;
@@ -52,6 +53,13 @@ Route::prefix("users")->name("api.users.")->group(function(){
             Route::post('',[RolesUserController::class,'store'])->name('store');
             Route::put('{role}',[RolesUserController::class,'update'])->name('update');
             Route::delete('{role}',[RolesUserController::class,'delete'])->name('delete');
+        });
+        Route::prefix('payments')->name('payments.')->group(function(){
+            Route::post('',[PaymentsController::class,'store'])->name('store');
+            Route::get('{payment}',[PaymentsController::class,'view'])->name('view');
+            Route::get('',[PaymentsController::class,'index'])->name('index');
+            Route::put('{payment}',[PaymentsController::class,'update'])->name('update');
+            Route::delete('{payment}',[PaymentsController::class,'delete'])->name('delete');
         });
         Route::get('',[UsersController::class,'index'])->name('index');
         Route::get('{user}',[UsersController::class,'view'])->name('view');

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PaymentSaveRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class PaymentSaveRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->tokenCan('payments-store');
     }
 
     /**
@@ -24,7 +25,12 @@ class PaymentSaveRequest extends FormRequest
     public function rules()
     {
         return [
-            ''
+            'name' => ['required','string'],
+            'is_card' => ['required_with:type_card','boolean'],
+            'type_card' => [Rule::in(['credit','debit']),'required_with:is_card'],
+            'is_cash' => ['boolean'],
+            'is_transfer_bank' => ['boolean'],
+            'required_vaucher' => ['boolean']
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PaymentUpdateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class PaymentUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->tokenCan('payments-update');
     }
 
     /**
@@ -24,7 +25,12 @@ class PaymentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['string'],
+            'is_card' => ['required_with:type_card','boolean'],
+            'type_card' => [Rule::in(['credit','debit']),'required_with:is_card'],
+            'is_cash' => ['boolean'],
+            'is_transfer_bank' => ['boolean'],
+            'required_vaucher' => ['boolean']
         ];
     }
 }

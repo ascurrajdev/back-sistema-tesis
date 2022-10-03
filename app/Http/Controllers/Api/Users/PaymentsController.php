@@ -6,17 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentSaveRequest;
 use App\Http\Requests\PaymentUpdateRequest;
 use App\Http\Resources\PaymentResource;
-use Illuminate\Http\Request;
 use App\Models\Payment;
 
 class PaymentsController extends Controller
 {
     public function index(){
+        $this->authorize('viewAny',Payment::class);
         $payments = Payment::get();
         return PaymentResource::collection($payments);
     }
 
     public function view(Payment $payment){
+        $this->authorize('view',$payment);
         return new PaymentResource($payment);
     }
 
@@ -33,6 +34,7 @@ class PaymentsController extends Controller
     }
 
     public function delete(Payment $payment){
+        $this->authorize('delete',$payment);
         $payment->delete();
         return new PaymentResource($payment);
     }
