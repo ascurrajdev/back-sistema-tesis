@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('decimals');
             $table->boolean("default")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

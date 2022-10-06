@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
+use App\Http\Controllers\Api\Users\AgenciesController;
+use App\Http\Controllers\Api\Users\CurrencyController;
 use App\Http\Controllers\Api\Users\PaymentsController;
 use App\Http\Controllers\Api\Users\ProductsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
@@ -54,12 +56,24 @@ Route::prefix("users")->name("api.users.")->group(function(){
             Route::put('{role}',[RolesUserController::class,'update'])->name('update');
             Route::delete('{role}',[RolesUserController::class,'delete'])->name('delete');
         });
+        Route::prefix('agencies')->name('agencies.')->group(function(){
+            Route::get('',[AgenciesController::class,'index'])->name('index');
+            Route::get('{agency}',[AgenciesController::class,'view'])->name('view');
+            Route::delete('{agency}',[AgenciesController::class,'delete'])->name('delete');
+        });
         Route::prefix('payments')->name('payments.')->group(function(){
             Route::post('',[PaymentsController::class,'store'])->name('store');
             Route::get('{payment}',[PaymentsController::class,'view'])->name('view');
             Route::get('',[PaymentsController::class,'index'])->name('index');
             Route::put('{payment}',[PaymentsController::class,'update'])->name('update');
             Route::delete('{payment}',[PaymentsController::class,'delete'])->name('delete');
+        });
+        Route::prefix('currencies')->name('currencies.')->group(function(){
+            Route::get('',[CurrencyController::class,'index'])->name('index');
+            Route::get('{currency}',[CurrencyController::class,'view'])->name('view');
+            Route::post('',[CurrencyController::class,'store'])->name('store');
+            Route::put('{currency}',[CurrencyController::class,'update'])->name('update');
+            Route::delete('{currency}',[CurrencyController::class,'delete'])->name('delete');
         });
         Route::get('',[UsersController::class,'index'])->name('index');
         Route::get('{user}',[UsersController::class,'view'])->name('view');

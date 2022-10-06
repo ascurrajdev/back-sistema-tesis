@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('active_for_reservations_online')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
