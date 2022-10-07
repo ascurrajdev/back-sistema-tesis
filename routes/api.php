@@ -60,6 +60,7 @@ Route::prefix("users")->name("api.users.")->group(function(){
             Route::get('',[AgenciesController::class,'index'])->name('index');
             Route::get('{agency}',[AgenciesController::class,'view'])->name('view');
             Route::post('',[AgenciesController::class,'store'])->name('store');
+            Route::put('{agency}',[AgenciesController::class,'update'])->name('update');
             Route::delete('{agency}',[AgenciesController::class,'delete'])->name('delete');
         });
         Route::prefix('payments')->name('payments.')->group(function(){

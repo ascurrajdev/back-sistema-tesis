@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AgencySaveRequest;
+use App\Http\Requests\AgencyUpdateRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\AgencyResource;
 use App\Models\Agency;
@@ -24,6 +25,14 @@ class AgenciesController extends Controller
         $params = $request->validated();
         $params['user_id'] = $request->user()->id;
         $agency = Agency::create($params);
+        return new AgencyResource($agency);
+    }
+
+    public function update(AgencyUpdateRequest $request, Agency $agency){
+        $params = $request->validated();
+        $params['user_id'] = $request->user()->id;
+        $agency->fill($params);
+        $agency->save();
         return new AgencyResource($agency);
     }
     
