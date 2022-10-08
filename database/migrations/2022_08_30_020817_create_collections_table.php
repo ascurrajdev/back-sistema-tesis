@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
             $table->double('total_amount',12,3)->default(0);
+            $table->double('total_amount_paid',12,3)->default(0);
+            $table->boolean("is_cancelled")->nullable()->default(false);
+            $table->string("link_payment")->nullable();
+            $table->string("hook_alias_payment")->nullable();
             $table->unsignedBigInteger('currency_id');
             $table->unsignedBigInteger('agency_id');
             $table->unsignedBigInteger('client_id')->nullable();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('currency_id');
             $table->double('amount',12,3)->default(0);
-            $table->integer('nro_transaction');
+            $table->integer('nro_transaction')->nullable();
             $table->foreign('payment_id')->references('id')->on('payments');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->timestamps();
