@@ -18,11 +18,11 @@ class TpagoPaymentService implements PaymentService{
             'amount' => $amount,
             'description' => $description
         ]);
-        return $response;
+        return $response->json();
     }
     public function makeReversePayment($paymentId){
         $response = Http::withBasicAuthAuth(config('tpago.public_key'),config('tpago.private_key'))->acceptJson()
         ->put(config('tpago.base_url')."commerces/{$this->commerceCode}/branches/{$this->branchCode}/links/payments/revert/{$paymentId}");
-        return $response;
+        return $response->json();
     }
 }
