@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
+use App\Http\Controllers\Api\Clients\TransactionOnlinePaymentsController;
 use App\Http\Controllers\Api\Users\AgenciesController;
 use App\Http\Controllers\Api\Users\CurrencyController;
 use App\Http\Controllers\Api\Users\PaymentsController;
@@ -23,7 +24,7 @@ use App\Http\Controllers\Api\Users\UsersController;
 |
 */
 
-Route::prefix("clients")->name("api.clients.")->group(function(){
+Route::prefix("clients")->name("clients.")->group(function(){
     Route::post("login",[LoginController::class,"loginClient"])->name("login");
     Route::post("register",[RegisterController::class,"registerClient"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
@@ -38,7 +39,7 @@ Route::prefix("clients")->name("api.clients.")->group(function(){
         });
     });
 });
-Route::prefix("users")->name("api.users.")->group(function(){
+Route::prefix("users")->name("users.")->group(function(){
     Route::post("login",[LoginController::class,"loginUser"])->name("login");
     Route::post("register",[RegisterController::class,"registerUser"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
@@ -84,3 +85,5 @@ Route::prefix("users")->name("api.users.")->group(function(){
         Route::delete('{user}',[UsersController::class,'delete'])->name('delete');
     });
 });
+
+Route::post('online-payments/callback',[TransactionOnlinePaymentsController::class,'callback'])->name('online-payments.callback');
