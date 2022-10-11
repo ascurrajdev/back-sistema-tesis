@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\TransactionOnlinePayment;
 use App\Models\Collection;
+use App\Models\CollectionPaymentDetail;
+use App\Models\Payment;
 class TransactionOnlinePaymentObserver
 {
     public function creating(TransactionOnlinePayment $transactionOnlinePayment){
@@ -24,11 +26,12 @@ class TransactionOnlinePaymentObserver
         if($transactionOnlinePayment->data['payment']['status'] == 'confirmed'){
             $dataPayment = $transactionOnlinePayment->data;
             $collection = $transactionOnlinePayment->collection;
-            if($collection){
-                $collection->total_amount_paid += $dataPayment['payment']['amount'];
-                $collection->is_cancelled = $collection->total_amount_paid == $collection->total_amount;
-                $collection->save();
-            }
+            CollectionPaymentDetail::create([
+                'collection_id' => $transactionOnlinePayment->collection_id,
+                'amount' => $dataPayment['payment']['amount'],
+                'transaction_online_payment_id' => $transactionOnlinePayment->id,
+                'currency_id' => $collection->currency_id,
+            ]);
         }
     }
 
@@ -41,13 +44,8 @@ class TransactionOnlinePaymentObserver
     public function updated(TransactionOnlinePayment $transactionOnlinePayment)
     {
         if($transactionOnlinePayment->is_reverse && $transactionOnlinePayment->data['payment']['status'] == 'confirmed'){
-            $dataPayment = $transactionOnlinePayment->data;
-            $collection = $transactionOnlinePayment->collection;
-            if($collection){
-                $collection->total_amount_paid -= $dataPayment['payment']['amount'];
-                $collection->is_cancelled = $collection->total_amount_paid == $collection->total_amount;
-                $collection->save();
-            }
+            $collectionPayment = CollectionPaymentDetail::firstWhere('transaction_online_payment_id',$transactionOnlinePayment->id);
+            $collectionPayment->delete();
         }
     }
 

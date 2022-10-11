@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('collection_payment_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('payment_id');
+            $table->unsignedBigInteger('payment_id')->nullable();
             $table->unsignedBigInteger('currency_id');
             $table->double('amount',12,3)->default(0);
-            $table->integer('nro_transaction');
+            $table->integer('nro_transaction')->nullable();
             $table->unsignedBigInteger('transaction_online_payment_id')->nullable();
             $table->foreign('transaction_online_payment_id')->on('transaction_online_payments')->references('id');
             $table->foreign('payment_id')->references('id')->on('payments');
