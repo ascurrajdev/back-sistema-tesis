@@ -11,7 +11,7 @@ class TransactionOnlinePaymentsController extends Controller
     public function callback(TransactionOnlinePaymentSave $request){
         $params = $request->validated();
         TransactionOnlinePayment::create([
-            'data' => json_encode($params),
+            'data' => $params,
         ]);
         if($params['payment']['status'] == "confirmed"){
             $response = response()->json([

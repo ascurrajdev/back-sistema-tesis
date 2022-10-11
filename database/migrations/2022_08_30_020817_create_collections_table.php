@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean("is_cancelled")->nullable()->default(false);
             $table->string("link_payment")->nullable();
             $table->string("hook_alias_payment")->nullable();
+            $table->double('total_amount_reverse',12,3)->default(0);
             $table->unsignedBigInteger('currency_id');
             $table->unsignedBigInteger('agency_id');
             $table->unsignedBigInteger('client_id')->nullable();

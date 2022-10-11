@@ -19,7 +19,7 @@ return new class extends Migration
             $table->double('total_discount',12,3)->default(0);
             $table->double('total_amount_untaxed',12,3)->default(0);
             $table->double('total_paid',12,3)->default(0);
-            $table->boolean('paid_cancelled')->default(true);
+            $table->boolean('paid_cancelled')->default(false);
             $table->enum('operation_type',['contado','credito'])->default('contado');
             $table->date('expiration_date')->nullable();
             $table->unsignedBigInteger('currency_id');

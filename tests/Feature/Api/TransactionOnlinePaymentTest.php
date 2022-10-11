@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\TransactionOnlinePayment;
 
 class TransactionOnlinePaymentTest extends TestCase
 {

@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('transaction_online_payments', function (Blueprint $table) {
             $table->id();
-            $table->json('data');
+            $table->text('data');
+            $table->boolean('is_reverse')->default(false);
+            $table->unsignedBigInteger('collection_id')->nullable();
+            $table->foreign('collection_id')->on('collections')->references('id');
             $table->timestamps();
             $table->softDeletes();
         });
