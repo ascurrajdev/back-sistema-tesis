@@ -15,11 +15,13 @@ class RegisterController extends Controller{
         $request->validate([
             'name' => ['required','string','min:3'],
             'email' => ['required','unique:clients','email'],
+            'phone_number' => ['required','unique:clients'],
             'password' => ['required','min:8','confirmed']
         ]);
         $client = Client::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password)
         ]);
         $token = $client->createToken($request->ip());

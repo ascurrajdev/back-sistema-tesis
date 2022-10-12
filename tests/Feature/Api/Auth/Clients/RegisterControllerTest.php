@@ -17,6 +17,7 @@ class RegisterControllerTest extends TestCase
         $response = $this->postJson(route("api.clients.register"),[
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'phone_number' => '595991631870',
             'password' => "123456789",
             'password_confirmation' => "123456789",
         ]);

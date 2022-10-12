@@ -4,7 +4,7 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\TransactionOnlinePayment;
+use App\Models\Collection;
 
 class TransactionOnlinePaymentTest extends TestCase
 {
@@ -14,10 +14,14 @@ class TransactionOnlinePaymentTest extends TestCase
      */
     public function can_post_callback_a_transaction_via_online_with_debit_target()
     {
+        Collection::factory()->create([
+            'hook_alias_payment' => 'PCJIZ61978',
+            'link_payment' => 'https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978',
+        ]);
         $response = $this->postJson(route('api.online-payments.callback'),[
             "payment" => [
                 "hook_alias" => "PCJIZ61978",
-                "link_url" => "https =>//comercios.bancard.com.py/tpago/payment_links/PCJIZ61978" ,
+                "link_url" => "https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978" ,
                 "status" => "confirmed",
                 "response_code" => "00", // Tipo de Error
                 "response_description" => "Pago exitoso",
