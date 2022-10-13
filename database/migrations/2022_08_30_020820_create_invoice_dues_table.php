@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('collection_details', function (Blueprint $table) {
+        Schema::create('invoice_dues', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('invoice_due_id');
-            $table->string('concept');
-            $table->unsignedBigInteger('currency_id');
+            $table->integer('number_due')->default(1);
             $table->double('amount',12,3);
-            $table->foreign('currency_id')->references('id')->on('currencies');
-            $table->foreign('invoice_due_id')->references('id')->on('invoice_dues');
+            $table->boolean('paid')->default(false);
+            $table->date('expiration_date');
+            $table->unsignedBigInteger('invoice_id');
+            $table->foreign('invoice_id')->on('invoices')->references('id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collection_details');
+        Schema::dropIfExists('invoice_dues');
     }
 };
