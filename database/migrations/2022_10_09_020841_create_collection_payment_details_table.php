@@ -20,6 +20,8 @@ return new class extends Migration
             $table->double('amount',12,3)->default(0);
             $table->integer('nro_transaction')->nullable();
             $table->unsignedBigInteger('transaction_online_payment_id')->nullable();
+            $table->unsignedBigInteger('collection_id');
+            $table->foreign('collection_id')->on('collections')->references('id');
             $table->foreign('transaction_online_payment_id')->on('transaction_online_payments')->references('id');
             $table->foreign('payment_id')->references('id')->on('payments');
             $table->foreign('currency_id')->references('id')->on('currencies');

@@ -16,6 +16,7 @@ class TransactionOnlinePaymentTest extends TestCase
     {
         Collection::factory()->create([
             'hook_alias_payment' => 'PCJIZ61978',
+            'total_amount' => 10000,
             'link_payment' => 'https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978',
         ]);
         $response = $this->postJson(route('api.online-payments.callback'),[
@@ -73,6 +74,11 @@ class TransactionOnlinePaymentTest extends TestCase
      */
     public function can_post_callback_a_transaction_via_online_with_credit_target()
     {
+        Collection::factory()->create([
+            'hook_alias_payment' => 'PCJIZ61978',
+            'total_amount' => 10000,
+            'link_payment' => 'https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978',
+        ]);
         $response = $this->postJson(route('api.online-payments.callback'),[
             "payment"=> [
                 "hook_alias"=> "PCJIZ61978",
@@ -129,6 +135,11 @@ class TransactionOnlinePaymentTest extends TestCase
      */
     public function can_post_callback_a_transaction_via_online_with_debit_account_bank()
     {
+        Collection::factory()->create([
+            'hook_alias_payment' => 'PCJIZ61978',
+            'total_amount' => 10000,
+            'link_payment' => 'https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978',
+        ]);
         $response = $this->postJson(route('api.online-payments.callback'),[
             "payment" => [
                 "hook_alias" => "PCJIZ61978",
@@ -184,6 +195,11 @@ class TransactionOnlinePaymentTest extends TestCase
      */
     public function can_post_callback_a_transaction_via_online_with_payment_reject()
     {
+        Collection::factory()->create([
+            'hook_alias_payment' => 'PCJIZ61978',
+            'total_amount' => 10000,
+            'link_payment' => 'https://comercios.bancard.com.py/tpago/payment_links/PCJIZ61978',
+        ]);
         $response = $this->postJson(route('api.online-payments.callback'),[
             "payment" => [
                 "hook_alias" => "PCJIZ61978",
