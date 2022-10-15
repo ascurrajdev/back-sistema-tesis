@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\ReservationDetail;
 use App\Models\ReservationLimit;
-use Illuminate\Support\Facades\Log;
 
 class ReservationDetailObserver
 {
@@ -17,7 +16,6 @@ class ReservationDetailObserver
      */
     public function created(ReservationDetail $reservationDetail)
     {
-        Log::info("Se activo el observador");
         $reservationDetail->load(['reservation','product']);
         if(!empty($reservationDetail->product->is_lodging)){
             $reservation = $reservationDetail->reservation;
@@ -33,7 +31,7 @@ class ReservationDetailObserver
                     $reservationLimit['available'] = $reservationDetail->product->capacity_for_day_max - $reservationDetail->quantity;
                 }else{
                     $reservationLimit['available'] -= $reservationDetail->quantity;
-                    $reservationLimit['id'] -= $reservationDetail->id;
+                    $reservationLimit['id'] = $reservationDetail->id;
                 }
                 $reservationLimit['date'] = $date;
                 $reservationLimit['product_id'] = $reservationDetail->product_id;

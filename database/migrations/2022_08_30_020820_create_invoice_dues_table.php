@@ -18,9 +18,12 @@ return new class extends Migration
             $table->integer('number_due')->default(1);
             $table->double('amount',12,3);
             $table->boolean('paid')->default(false);
-            $table->date('expiration_date');
-            $table->unsignedBigInteger('invoice_id');
+            $table->timestamp('expiration_date');
+            $table->unsignedBigInteger('invoice_id')->nullable();
             $table->foreign('invoice_id')->on('invoices')->references('id');
+            $table->unsignedBigInteger('reservation_id')->nullable();
+            $table->foreign('reservation_id')->on('reservations')->references('id');
+            $table->boolean('is_initial_reservation_payment')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

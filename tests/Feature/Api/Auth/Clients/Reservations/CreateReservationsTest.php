@@ -49,6 +49,7 @@ class CreateReservationsTest extends TestCase
                 ]
             ]
         ]);
+        $response->dump();
         $response->assertCreated();
         $this->assertDatabaseCount("reservation_details",1);
         $this->assertDatabaseCount("reservation_limits",6);

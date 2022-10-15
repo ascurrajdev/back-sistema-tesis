@@ -23,6 +23,10 @@ class Reservation extends Model
         return $this->belongsTo(Agency::class);
     }
 
+    public function invoiceDue(){
+        return $this->hasOne(InvoiceDue::class,'reservation_id');
+    }
+
     public function reservationDetail(){
         return $this->hasMany(ReservationDetail::class);
     }

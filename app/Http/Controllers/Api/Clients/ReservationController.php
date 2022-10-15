@@ -6,6 +6,9 @@ use App\Models\ReservationLimit;
 use App\Models\Product;
 use App\Models\Currency;
 use App\Models\Agency;
+use App\Models\Invoice;
+use App\Models\ReservationConfig;
+use App\Models\InvoiceDue;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
@@ -54,8 +57,9 @@ class ReservationController extends Controller{
             $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
         }
         $reservation = Reservation::create($reservationArray);
+        $reservationDetails = array();
         foreach($params["details"] as $value){
-            ReservationDetail::create([
+            $reservationDetails[] = ReservationDetail::create([
                 "reservation_id" => $reservation->id,
                 "amount" => $value["amount"],
                 "discount" => $value["discount"],
@@ -64,7 +68,29 @@ class ReservationController extends Controller{
                 "currency_id" => $reservation->currency_id,
             ]);
         };
+        $this->calculateConfigsReservation($reservation);
+        $reservation->load('invoiceDue');
         return new ReservationResource($reservation);
+    }
+
+    private function calculateConfigsReservation($reservation){
+        $reservationConfig = ReservationConfig::firstWhere('active',true);
+        if(empty($reservationConfig)){
+            $reservationConfig = ReservationConfig::create([
+                'is_partial_payment' => config('reservation.limits.default.is_partial_payment'),
+                'initial_payment_percent' => config('reservation.limits.default.initial_payment_percent'),
+                'max_quantity_quotes' => config('reservation.limits.default.max_quantity_quotes'),
+                'max_days_expiration_initial_payment' => config('reservation.limits.default.max_days_expiration_initial_payment'),
+            ]);
+        }
+        if($reservationConfig->is_partial_payment){
+            InvoiceDue::create([
+                'amount' => $reservation->total_amount * $reservationConfig->initial_payment_percent / 100,
+                'expiration_date' => now()->addDays($reservationConfig->max_days_expiration_initial_payment),
+                'reservation_id' => $reservation->id,
+                'is_initial_reservation_payment' => true,
+            ]);
+        }
     }
 
     public function availabilities(){
