@@ -18,6 +18,10 @@ return new class extends Migration
             $table->integer('number_due')->default(1);
             $table->double('amount',12,3);
             $table->boolean('paid')->default(false);
+            $table->unsignedBigInteger('currency_id');
+            $table->foreign('currency_id')->on('currencies')->references('id');
+            $table->unsignedBigInteger('agency_id');
+            $table->foreign('agency_id')->references('id')->on('agencies');
             $table->timestamp('expiration_date');
             $table->unsignedBigInteger('invoice_id')->nullable();
             $table->foreign('invoice_id')->on('invoices')->references('id');

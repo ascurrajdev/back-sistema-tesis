@@ -10,4 +10,12 @@ class InvoiceDue extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function collection(){
+        return $this->belongsToMany(Collection::class,'collection_details','invoice_due_id','collection_id')->orderBy('id');
+    }
+
+    public function reservation(){
+        return $this->belongsTo(Reservation::class);
+    }
 }

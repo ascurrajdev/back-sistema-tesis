@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Clients\ReservationController;
 use App\Http\Controllers\Api\Clients\ClientController;
+use App\Http\Controllers\Api\Clients\InvoiceDueController;
 use App\Http\Controllers\Api\Clients\TransactionOnlinePaymentsController;
 use App\Http\Controllers\Api\Users\AgenciesController;
 use App\Http\Controllers\Api\Users\CurrencyController;
@@ -36,6 +37,9 @@ Route::prefix("clients")->name("clients.")->group(function(){
             Route::post("",[ReservationController::class,"store"])->name("store");
             Route::get("{reservation}",[ReservationController::class,"view"])->name("view");
             Route::put("{reservation}",[ReservationController::class,"update"])->name("update");
+        });
+        Route::prefix('invoice_due')->name('invoice_due.')->group(function(){
+            Route::get('payment/{invoiceDue}',[InvoiceDueController::class,'payment'])->name('payment');
         });
     });
 });

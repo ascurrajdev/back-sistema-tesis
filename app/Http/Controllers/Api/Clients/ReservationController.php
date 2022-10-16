@@ -89,6 +89,8 @@ class ReservationController extends Controller{
                 'expiration_date' => now()->addDays($reservationConfig->max_days_expiration_initial_payment),
                 'reservation_id' => $reservation->id,
                 'is_initial_reservation_payment' => true,
+                'currency_id' => $reservation->currency_id,
+                'agency_id' => $reservation->agency_id,
             ]);
         }
     }

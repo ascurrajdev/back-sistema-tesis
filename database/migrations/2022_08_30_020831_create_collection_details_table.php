@@ -21,6 +21,8 @@ return new class extends Migration
             $table->double('amount',12,3);
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('invoice_due_id')->references('id')->on('invoice_dues');
+            $table->unsignedBigInteger('collection_id');
+            $table->foreign('collection_id')->references('id')->on('collections');
             $table->timestamps();
         });
     }

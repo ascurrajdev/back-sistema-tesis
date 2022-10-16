@@ -10,10 +10,7 @@ class Collection extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function invoices(){
-        return $this->belongsToMany(Invoice::class,'invoice_collection_details');
-    }
-
+    protected $guarded = [];
     public function details(){
         return $this->hasMany(CollectionDetail::class);
     }

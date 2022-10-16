@@ -26,7 +26,7 @@ class ReservationFactory extends Factory
             'currency_id' => Currency::factory(),
             'date_from' => now(),
             'date_to' => now(),
-            'total_amount' => 100,
+            'total_amount' => 100000,
             'total_discount' => 0,
             'notes' => 'Ninguna',
             'active' => true,
