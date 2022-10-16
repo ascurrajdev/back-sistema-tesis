@@ -32,6 +32,10 @@ class TransactionOnlinePaymentObserver
                 'transaction_online_payment_id' => $transactionOnlinePayment->id,
                 'currency_id' => $collection->currency_id,
             ]);
+            $collection->update([
+                'is_paid' => true,
+                'total_amount_paid' => $collection->total_amount_paid + $transactionOnlinePayment->data['payment']['amount'],
+            ]);
         }
     }
 

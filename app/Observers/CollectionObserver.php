@@ -3,13 +3,30 @@
 namespace App\Observers;
 
 use App\Models\Collection;
+use App\Models\Reservation;
+use App\Notifications\SendConfirmationReserved;
 
 class CollectionObserver
 {
 
     public function saved(Collection $collection){
-        if($collection->total_amount && $collection->total_amount_paid){
-            
+        if($collection->is_paid && $collection->total_amount && $collection->total_amount_paid){
+            $collection->load('details.invoiceDue');
+            $sendConfirmationReserved = false;
+            foreach($collection->details as $detail){
+                if($detail->invoiceDue->is_initial_reservation_payment){
+                    $sendConfirmationReserved = true;
+                    $reservation = Reservation::find($detail->invoiceDue->reservation_id);
+                    $reservation->update([
+                        'active' => true,
+                        'status' => 'reserved'
+                    ]);
+                }
+            } 
+            if($sendConfirmationReserved){
+                $client = $collection->client;
+                $client->notify(new SendConfirmationReserved());
+            }          
         }
     }
 

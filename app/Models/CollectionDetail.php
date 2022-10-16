@@ -10,4 +10,8 @@ class CollectionDetail extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function invoiceDue(){
+        return $this->belongsTo(InvoiceDue::class);
+    }
 }
