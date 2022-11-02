@@ -15,6 +15,10 @@ class Product extends Model
         return $this->belongsTo(ProductPricingProfile::class);
     }
 
+    public function currency(){
+        return $this->belongsTo(Currency::class);
+    }
+
     public function user(){
         return $this->belongsTo(User::class);
     }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('capacity_min')->default(0);
             $table->integer('capacity_max')->default(0);
             $table->integer('available');
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
             $table->boolean('active')->default(true);
             $table->timestamps();

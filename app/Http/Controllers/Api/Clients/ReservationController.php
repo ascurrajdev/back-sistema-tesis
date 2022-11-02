@@ -6,7 +6,6 @@ use App\Models\ReservationLimit;
 use App\Models\Product;
 use App\Models\Currency;
 use App\Models\Agency;
-use App\Models\Invoice;
 use App\Models\ReservationConfig;
 use App\Models\InvoiceDue;
 use Illuminate\Http\Request;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
+use App\Http\Resources\ProductResource;
 
 class ReservationController extends Controller{
     use ResponseTrait;
@@ -95,8 +95,14 @@ class ReservationController extends Controller{
         }
     }
 
-    public function availabilities(){
-        return ReservationLimitResource::collection(ReservationLimit::orderBy('date','desc')->get());
+    public function availabilities(Request $request){
+        $reservationsLimit = ReservationLimit::query();
+        $availablesFilters = ['quantity'];
+        $request->collect()->map(function($value, $key) use ($reservationsLimit,$availablesFilters){
+            if(in_array($key,$availablesFilters)) $reservationsLimit->{$key}($value);
+        });
+        $reservationsLimit = $reservationsLimit->orderBy('date','desc')->get();
+        return ReservationLimitResource::collection($reservationsLimit);
     }
 
     public function view(Reservation $reservation, Request $request){
@@ -117,4 +123,11 @@ class ReservationController extends Controller{
         return new ReservationResource($reservation);
     }
     
+    public function products(){
+        $products = Product::where([
+            ['active_for_reservation', '=', true],
+            ['is_lodging', '=', true]
+        ])->with(['currency'])->get();
+        return ProductResource::collection($products);
+    }
 }

@@ -36,4 +36,28 @@ class ListAvailablesDatesTest extends TestCase
             ]
         ]);
     }
+    /**
+     * @test
+     */
+    public function can_list_all_availabilities_of_reservations_with_params_query()
+    {
+        Sanctum::actingAs(Client::factory()->create(),["*"]);
+        ReservationLimit::factory()->count(8)->create();
+        $response = $this->getJson(route('api.clients.reservations.availabilities',[
+            'quantity' => 10
+        ]));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            "data" => [
+                '*' => [
+                    "id",
+                    "date",
+                    "capacity_min",
+                    "capacity_max",
+                    "available",
+                    "product_id"
+                ]
+            ]
+        ]);
+    }
 }

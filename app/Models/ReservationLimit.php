@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ReservationLimit extends Model
 {
     use HasFactory;
+
+    public function scopeQuantity($query, $value){
+        return $query->where('available','<',$value);
+    }
+
 }

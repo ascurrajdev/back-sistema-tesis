@@ -15,6 +15,7 @@ class ProductResource extends JsonResource
             'amount_untaxed' => $this->resource->amount_untaxed,
             'stockable' => $this->resource->stockable,
             'active_for_reservation' => $this->resource->active_for_reservation,
+            'currency' => $this->whenLoaded('currency',new CurrencyResource($this->currency)),
         ];
     }
 }
