@@ -36,6 +36,7 @@ Route::prefix("clients")->name("clients.")->group(function(){
             Route::get("availabilities",[ReservationController::class,"availabilities"])->name("availabilities");
             Route::get("",[ReservationController::class,"index"])->name("index");
             Route::post("",[ReservationController::class,"store"])->name("store");
+            Route::get('config',[ReservationController::class,'config'])->name('config');
             Route::get("{reservation}",[ReservationController::class,"view"])->name("view");
             Route::put("{reservation}",[ReservationController::class,"update"])->name("update");
         });

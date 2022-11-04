@@ -11,6 +11,7 @@ use App\Models\InvoiceDue;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReservationConfigResource;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
@@ -129,5 +130,18 @@ class ReservationController extends Controller{
             ['is_lodging', '=', true]
         ])->with(['currency'])->get();
         return ProductResource::collection($products);
+    }
+
+    public function config(){
+        $reservationConfig = ReservationConfig::firstWhere('active',true);
+        if(empty($reservationConfig)){
+            $reservationConfig = ReservationConfig::create([
+                'is_partial_payment' => config('reservation.limits.default.is_partial_payment'),
+                'initial_payment_percent' => config('reservation.limits.default.initial_payment_percent'),
+                'max_quantity_quotes' => config('reservation.limits.default.max_quantity_quotes'),
+                'max_days_expiration_initial_payment' => config('reservation.limits.default.max_days_expiration_initial_payment'),
+            ]);
+        }
+        return new ReservationConfigResource($reservationConfig);
     }
 }

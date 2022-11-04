@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('reservation_configs', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_partial_payment')->default(false);
-            $table->double('initial_payment_percent',8,2)->nullable();
-            $table->integer('max_quantity_quotes')->default(1);
-            $table->integer('max_days_expiration_initial_payment')->default(1);
+            $table->boolean('is_partial_payment')->comment('Acepta pagos parciales')->default(false);
+            $table->double('initial_payment_percent',8,2)->comment('El porcentaje del pago inicial')->nullable();
+            $table->integer('max_quantity_quotes')->comment('Cantidad maxima de pagos')->default(1);
+            $table->integer('max_days_expiration_initial_payment')->comment('La cantidad maxima de dias para hacer el pago inicial')->default(1);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
