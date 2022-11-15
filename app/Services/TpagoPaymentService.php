@@ -12,7 +12,7 @@ class TpagoPaymentService implements PaymentService{
         $this->commerceCode = config('tpago.commerce_code');
         $this->branchCode = config('tpago.branch_code');
     }
-    public function createLinkPayment($amount,$description){
+    public function createLinkPayment($client,$amount,$description){
         $response = Http::withBasicAuth(config('tpago.public_key'),config('tpago.private_key'))->acceptJson()
         ->post(config('tpago.base_url')."commerces/{$this->commerceCode}/branches/{$this->branchCode}/links/generate-payment-link",[
             'amount' => $amount,
