@@ -47,12 +47,12 @@ class InvoiceDueController extends Controller
         foreach($collection->details as $detail){
             $description[] = $detail->concept;
         }
-        $paymentLink = $this->paymentService->createLinkPayment($collection->total_amount,implode(',',$description));
+        $paymentLink = $this->paymentService->createLinkPayment($request->user(),$collection->total_amount,implode(',',$description));
         if($paymentLink['status'] == 'error'){
             return $this->error($paymentLink,400);
         }
-        $collection->link_payment = $paymentLink['payment_link']['link_url'];
-        $collection->hook_alias_payment = $paymentLink['payment_link']['link_alias'];
+        $collection->link_payment = $paymentLink['redirect_url'];
+        $collection->hook_alias_payment = $paymentLink['merchant_checkout_token'];
         $collection->save();
         return $this->success($collection->link_payment);
     }

@@ -16,6 +16,7 @@ use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
 use App\Http\Resources\ProductResource;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller{
     use ResponseTrait;
@@ -44,6 +45,7 @@ class ReservationController extends Controller{
             "agency_id" => $agency->id,
             'quantity_people' => 0,
         ];
+        Log::info($params);
         $productIds = collect($params["details"])->map(function($value){ 
             return $value["product_id"];
         })->all();
