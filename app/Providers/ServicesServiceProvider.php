@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\PaymentService;
 use App\Services\TpagoPaymentService;
+use App\Services\DlocalPaymentService;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,7 @@ class ServicesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(PaymentService::class,TpagoPaymentService::class);
+        $this->app->bind(PaymentService::class,DlocalPaymentService::class);
     }
 
     /**
