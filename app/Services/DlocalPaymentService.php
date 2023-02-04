@@ -32,7 +32,8 @@ class DlocalPaymentService implements PaymentService{
             'payer' => [
                 'name' => $client->name,
                 'email' => $client->email,
-            ]
+            ],
+            'notification_url' => route('api.online-payments.callback')
         ]);
         return $response->json();
     }
