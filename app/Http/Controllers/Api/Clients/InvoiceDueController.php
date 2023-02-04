@@ -53,6 +53,7 @@ class InvoiceDueController extends Controller
         }
         $collection->link_payment = $paymentLink['redirect_url'];
         $collection->hook_alias_payment = $paymentLink['merchant_checkout_token'];
+        $collection->payment_online_id = $paymentLink['id'];
         $collection->save();
         return $this->success($collection->link_payment);
     }

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->string("payment_online_id");
+            $table->string("payment_online_id")->nullable(true);
         });
     }
 
