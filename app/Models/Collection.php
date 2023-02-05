@@ -14,4 +14,8 @@ class Collection extends Model
     public function details(){
         return $this->hasMany(CollectionDetail::class);
     }
+
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

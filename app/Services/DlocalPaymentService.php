@@ -33,7 +33,7 @@ class DlocalPaymentService implements PaymentService{
                 'name' => $client->name,
                 'email' => $client->email,
             ],
-            'notification_url' => route('api.online-payments.callback')
+            'notification_url' => "https://1552-206-0-93-208.sa.ngrok.io/api/online-payments/dlocal/notification"
         ]);
         return $response->json();
     }
@@ -42,6 +42,14 @@ class DlocalPaymentService implements PaymentService{
             'verify' => false
         ])->withBasicAuth($this->apiKey,$this->secretKey)->acceptJson()
         ->put(config('dlocal.base_url')."commerces/{$this->commerceCode}/branches/{$this->branchCode}/links/payments/revert/{$paymentId}");
+        return $response->json();
+    }
+
+    public function getPaymentById($paymentId){
+        $response = Http::withOptions([
+            'verify' => false
+        ])->withBasicAuth($this->apiKey,$this->secretKey)->acceptJson()
+        ->get(config('dlocal.base_url')."/v1/payments/{$paymentId}");
         return $response->json();
     }
 }

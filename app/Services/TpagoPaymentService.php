@@ -25,4 +25,8 @@ class TpagoPaymentService implements PaymentService{
         ->put(config('tpago.base_url')."commerces/{$this->commerceCode}/branches/{$this->branchCode}/links/payments/revert/{$paymentId}");
         return $response->json();
     }
+
+    public function getPaymentById($paymentId){
+        
+    }
 }

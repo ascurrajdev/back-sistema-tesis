@@ -93,3 +93,4 @@ Route::prefix("users")->name("users.")->group(function(){
 });
 
 Route::post('online-payments/callback',[TransactionOnlinePaymentsController::class,'callback'])->name('online-payments.callback');
+Route::post('online-payments/dlocal/notification',[TransactionOnlinePaymentsController::class,'dlocalNotification'])->name('online-payments.dlocal.notifcation');

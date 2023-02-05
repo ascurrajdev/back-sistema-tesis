@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers\Api\Clients;
 
+use App\Contracts\PaymentService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DlocalNotificationRequest;
 use App\Http\Requests\TransactionOnlinePaymentSave;
 use App\Models\TransactionOnlinePayment;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class TransactionOnlinePaymentsController extends Controller
 {
+    private $paymentService;
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
     public function callback(Request $request){
         Log::info($request->all());
         // $params = $request->validated();
@@ -41,5 +49,30 @@ class TransactionOnlinePaymentsController extends Controller
         // }
         // return $response;
         return $request->all();
+    }
+
+    public function dlocalNotification(DlocalNotificationRequest $request){
+        $dataPayment = $request->validated();
+        Log::info($dataPayment);
+        $paymentData = $this->paymentService->getPaymentById($dataPayment['payment_id']);
+        Log::info($paymentData);
+        $collection = Collection::firstWhere(['payment_online_id' => $dataPayment['payment_id']]);
+        switch($paymentData['status']){
+            case "PAID":
+                $collection->total_amount_paid = $paymentData['amount'];
+                if($collection->total_amount_paid == $collection->total_amount){
+                    $collection->is_paid = true;
+                }
+            break;
+            case "PENDING":
+            break;
+            case "REJECTED":
+            break;
+            case "CANCELLED":
+            break;
+            case "EXPIRED":
+            break;
+        }
+        $collection->save();
     }
 }

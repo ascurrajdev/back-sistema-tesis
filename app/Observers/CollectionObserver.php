@@ -11,7 +11,7 @@ class CollectionObserver
 
     public function saved(Collection $collection){
         if($collection->is_paid && $collection->total_amount && $collection->total_amount_paid){
-            $collection->load('details.invoiceDue');
+            $collection->load(['details.invoiceDue','client']);
             $sendConfirmationReserved = false;
             foreach($collection->details as $detail){
                 if($detail->invoiceDue->is_initial_reservation_payment){
