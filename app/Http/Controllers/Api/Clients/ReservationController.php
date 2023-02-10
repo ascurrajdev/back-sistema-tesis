@@ -26,6 +26,9 @@ class ReservationController extends Controller{
         $reservations = Reservation::query();
         $reservations->with(['reservationDetail','agency','currency']);
         $reservations->client($client->id);
+        foreach($request->query() as $key => $value){
+            $reservations->{$key}($value);
+        }
         $reservations->orderBy('id','desc');
         $reservationsList = $reservations->paginate();
         return ReservationResource::collection($reservationsList);

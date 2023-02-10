@@ -36,7 +36,15 @@ class Reservation extends Model
     }
 
     public function scopeActive($query, $active = true){
-        $query->where('active',$active);
+        switch($active){
+            case "true":
+                $active = true;
+            break;
+            case "false":
+                $active = false;
+            break;
+        }
+        $query->where('active',$active ? 1 : 0);
     }
 
     public function scopeFrom($query,$from){
