@@ -17,7 +17,10 @@ class PaymentFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
+            'name' => 'dlocal',
+            'is_online_transaction' => true,
+            'is_cash' => false,
+            'required_vaucher' => true
         ];
     }
 }

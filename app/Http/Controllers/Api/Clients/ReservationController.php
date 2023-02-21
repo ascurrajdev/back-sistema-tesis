@@ -49,7 +49,6 @@ class ReservationController extends Controller{
             "agency_id" => $agency->id,
             'quantity_people' => 0,
         ];
-        Log::info($params);
         $productIds = collect($params["details"])->map(function($value){ 
             return $value["product_id"];
         })->all();

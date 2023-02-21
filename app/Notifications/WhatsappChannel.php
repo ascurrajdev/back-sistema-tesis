@@ -22,6 +22,8 @@ class WhatsappChannel
      */
     public function send($notifiable, Notification $notification)
     {
+        $notifiable->phone_number = str_replace("+","",$notifiable->phone_number);
+        $notifiable->phone_number = str_replace(" ","",$notifiable->phone_number);
         $whatsappMessageOptions = $notification->toWhatsapp($notifiable)->to($notifiable->phone_number);
         $this->whatsappService->sendMessage($whatsappMessageOptions->toArray());
     }

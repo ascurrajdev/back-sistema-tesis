@@ -8,6 +8,8 @@ use App\Http\Requests\DlocalNotificationRequest;
 use App\Http\Requests\TransactionOnlinePaymentSave;
 use App\Models\TransactionOnlinePayment;
 use App\Models\Collection;
+use App\Models\Payment;
+use App\Models\CollectionPaymentDetail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -57,8 +59,18 @@ class TransactionOnlinePaymentsController extends Controller
         $paymentData = $this->paymentService->getPaymentById($dataPayment['payment_id']);
         Log::info($paymentData);
         $collection = Collection::firstWhere(['payment_online_id' => $dataPayment['payment_id']]);
+        $transaction = TransactionOnlinePayment::create([
+            'data' => $paymentData,
+            'is_reverse' => false,
+            'collection_id' => $collection->id,
+        ]);
         switch($paymentData['status']){
             case "PAID":
+                CollectionPaymentDetail::create([
+                    'currency_id' => $collection->currency_id,
+                    'amount' => $paymentData['amount'],
+                    'transaction_online_payment_id' => $transaction->id
+                ]);
                 $collection->total_amount_paid = $paymentData['amount'];
                 if($collection->total_amount_paid == $collection->total_amount){
                     $collection->is_paid = true;
