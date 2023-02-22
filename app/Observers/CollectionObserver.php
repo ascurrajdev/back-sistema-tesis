@@ -22,6 +22,8 @@ class CollectionObserver
                         'status' => 'reserved'
                     ]);
                 }
+                $detail->invoiceDue->paid = true;
+                $detail->invoiceDue->save();
             } 
             if($sendConfirmationReserved){
                 $client = $collection->client;

@@ -117,6 +117,11 @@ class ReservationController extends Controller{
         return new ReservationResource($reservation);
     }
 
+    public function billing(Reservation $reservation, Request $request){
+        $this->authorizeForUser($request->user(),"view",$reservation);
+        $reservation->load(['reservationDetail','agency','currency']);
+    }
+
     public function update(Reservation $reservation, Request $request){
         $request->validate([
             'date_from' => ['before_or_equal:date_to'],
