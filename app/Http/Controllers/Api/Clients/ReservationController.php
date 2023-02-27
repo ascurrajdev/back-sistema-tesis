@@ -8,6 +8,7 @@ use App\Models\Currency;
 use App\Models\Agency;
 use App\Models\ReservationConfig;
 use App\Models\InvoiceDue;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,6 @@ use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
 use App\Http\Resources\ProductResource;
-use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller{
     use ResponseTrait;
@@ -53,6 +53,7 @@ class ReservationController extends Controller{
             return $value["product_id"];
         })->all();
         $products = Product::whereIn("id",$productIds)->get();
+        $totalAmountUntaxed = 0;
         foreach($params["details"] as $key => $detail){
             $productSelected = $products->where("id",$detail["product_id"])->first();
             if($productSelected->is_lodging){
@@ -60,26 +61,57 @@ class ReservationController extends Controller{
             }
             $params["details"][$key]["amount"] = $productSelected->amount;
             $params["details"][$key]["discount"] = 0;
+            $params["details"][$key]["amount_discount"] = 0;
+            $params["details"][$key]["currency_id"] = $reservationArray['currency_id'];
+            $params["details"][$key]["tax_id"] = $productSelected->tax_id;
+            $params["details"][$key]["tax_rate"] = $productSelected->tax_rate;
+            $params["details"][$key]["amount_untaxed"] = $productSelected->amount - ($productSelected->amount / 11 * $productSelected->tax_rate);
             $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
+            $totalAmountUntaxed += $productSelected->amount / 11 * $productSelected->tax_rate;
         }
         $reservation = Reservation::create($reservationArray);
+        $invoice = Invoice::create([
+            'total_amount' => $reservationArray['total_amount'],
+            'total_discount' => $reservationArray['total_discount'],
+            'total_paid' => 0,
+            'paid_cancelled' => false,
+            'operation_type' => 'credito',
+            'expiration_date' => $reservationArray['date_to'],
+            'currency_id' => $reservationArray['currency_id'],
+            'agency_id' => $reservationArray['agency_id'],
+            'client_id' => $reservationArray['client_id'],
+            'total_amount_untaxed' => $totalAmountUntaxed,
+        ]);
         $reservationDetails = array();
+        $invoiceDetails = array();
         foreach($params["details"] as $value){
-            $reservationDetails[] = ReservationDetail::create([
-                "reservation_id" => $reservation->id,
+            $reservationDetails[] = [
                 "amount" => $value["amount"],
                 "discount" => $value["discount"],
                 "quantity" => $value["quantity"],
                 "product_id" => $value["product_id"],
                 "currency_id" => $reservation->currency_id,
-            ]);
+            ];
+            $invoiceDetails[] = [
+                'product_id' => $value['product_id'],
+                'currency_id' => $value['currency_id'],
+                'tax_id' => $value['tax_id'],
+                'tax_rate' => $value['tax_rate'],
+                'amount' => $value['amount'],
+                'amount_untaxed' => $value['amount_untaxed'],
+                'amount_discount' => $value['amount_discount'],
+                'quantity' => $value['quantity'],
+            ];
         };
-        $this->calculateConfigsReservation($reservation);
+        $invoice->details()->createMany($invoiceDetails);
+        $reservation->reservationDetail()->createMany($reservationDetails);
+        $reservation->invoice()->attach($invoice->id);
+        $this->calculateConfigsReservation($reservation, $invoice);
         $reservation->load('invoiceDue');
         return new ReservationResource($reservation);
     }
 
-    private function calculateConfigsReservation($reservation){
+    private function calculateConfigsReservation($reservation, $invoice){
         $reservationConfig = ReservationConfig::firstWhere('active',true);
         if(empty($reservationConfig)){
             $reservationConfig = ReservationConfig::create([
@@ -91,6 +123,8 @@ class ReservationController extends Controller{
         }
         if($reservationConfig->is_partial_payment){
             InvoiceDue::create([
+                'number_due' => 1,
+                'invoice_id' => $invoice->id,
                 'amount' => $reservation->total_amount * $reservationConfig->initial_payment_percent / 100,
                 'expiration_date' => now()->addDays($reservationConfig->max_days_expiration_initial_payment),
                 'reservation_id' => $reservation->id,

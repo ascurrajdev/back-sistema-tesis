@@ -23,7 +23,7 @@ class InvoiceDueFactory extends Factory
     {
         return [
             'number_due' => 1,
-            'amount' => 1000,
+            'amount' => 10000,
             'currency_id' => Currency::factory(),
             'agency_id' => Agency::factory(),
             'expiration_date' => now()->addDays(7),

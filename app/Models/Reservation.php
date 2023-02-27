@@ -24,7 +24,11 @@ class Reservation extends Model
     }
 
     public function invoiceDue(){
-        return $this->hasOne(InvoiceDue::class,'reservation_id');
+        return $this->hasMany(InvoiceDue::class,'reservation_id');
+    }
+
+    public function invoice(){
+        return $this->belongsToMany(Invoice::class,'reservation_invoices_details','reservation_id','invoice_id');
     }
 
     public function reservationDetail(){

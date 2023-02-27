@@ -34,7 +34,7 @@ class DlocalPaymentService implements PaymentService{
                 'email' => $client->email,
             ],
             'success_url' => "http://localhost:5173/guards/clients/reservations/add?step=4",
-            'notification_url' => "https://1552-206-0-93-208.sa.ngrok.io/api/online-payments/dlocal/notification"
+            'notification_url' => " https://0914-2803-2a00-2c15-e181-f144-a664-6a9b-6cec.ngrok.io/api/online-payments/dlocal/notification"
         ]);
         return $response->json();
     }
