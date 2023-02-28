@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api\Clients;
 use App\Models\Reservation;
-use App\Models\ReservationDetail;
 use App\Models\ReservationLimit;
 use App\Models\Product;
 use App\Models\Currency;
@@ -16,6 +15,8 @@ use App\Http\Resources\ReservationConfigResource;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
+use App\Http\Resources\ReservationBillingResource;
+use DB;
 use App\Http\Resources\ProductResource;
 
 class ReservationController extends Controller{
@@ -153,7 +154,11 @@ class ReservationController extends Controller{
 
     public function billing(Reservation $reservation, Request $request){
         $this->authorizeForUser($request->user(),"view",$reservation);
-        $reservation->load(['reservationDetail','agency','currency']);
+        $reservationId = $reservation->id;
+        $collections = DB::table('collections')
+        ->whereRaw("id in (SELECT collection_id From collection_details where invoice_due_id in (select id from invoice_dues where reservation_id = ?))",[$reservationId])
+        ->get();
+        return ReservationBillingResource::collection($collections->all());
     }
 
     public function update(Reservation $reservation, Request $request){
