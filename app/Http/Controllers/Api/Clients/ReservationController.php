@@ -15,7 +15,7 @@ use App\Http\Resources\ReservationConfigResource;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
-use App\Http\Resources\ReservationBillingResource;
+use App\Http\Resources\collections\ReservationBillingCollection;
 use DB;
 use App\Http\Resources\ProductResource;
 
@@ -158,7 +158,10 @@ class ReservationController extends Controller{
         $collections = DB::table('collections')
         ->whereRaw("id in (SELECT collection_id From collection_details where invoice_due_id in (select id from invoice_dues where reservation_id = ?))",[$reservationId])
         ->get();
-        return ReservationBillingResource::collection($collections->all());
+        
+        return (new ReservationBillingCollection($collections->all()))->additional([
+            'amount_pending_paid' => 10000
+        ]);
     }
 
     public function update(Reservation $reservation, Request $request){
