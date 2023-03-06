@@ -26,8 +26,8 @@ class CollectionObserver
                 $detail->invoiceDue->save();
             } 
             if($sendConfirmationReserved){
-                $client = $collection->client;
-                $client->notify(new SendConfirmationReserved());
+                // $client = $collection->client;
+                // $client->notify(new SendConfirmationReserved());
             }          
         }
     }

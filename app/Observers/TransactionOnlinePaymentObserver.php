@@ -5,12 +5,11 @@ namespace App\Observers;
 use App\Models\TransactionOnlinePayment;
 use App\Models\Collection;
 use App\Models\CollectionPaymentDetail;
-use App\Models\Payment;
 class TransactionOnlinePaymentObserver
 {
     public function creating(TransactionOnlinePayment $transactionOnlinePayment){
         $dataPayment = $transactionOnlinePayment->data;
-        $collection = Collection::firstWhere('hook_alias_payment',$dataPayment['payment']['hook_alias']);
+        $collection = Collection::firstWhere('hook_alias_payment',$dataPayment['order_id']);
         if($collection){
             $transactionOnlinePayment->collection_id = $collection->id;
         }
@@ -23,18 +22,14 @@ class TransactionOnlinePaymentObserver
      */
     public function created(TransactionOnlinePayment $transactionOnlinePayment)
     {
-        if($transactionOnlinePayment->data['payment']['status'] == 'confirmed'){
+        if($transactionOnlinePayment->data['status'] == 'PAID'){
             $dataPayment = $transactionOnlinePayment->data;
             $collection = $transactionOnlinePayment->collection;
             CollectionPaymentDetail::create([
                 'collection_id' => $transactionOnlinePayment->collection_id,
-                'amount' => $dataPayment['payment']['amount'],
+                'amount' => $dataPayment['amount'],
                 'transaction_online_payment_id' => $transactionOnlinePayment->id,
                 'currency_id' => $collection->currency_id,
-            ]);
-            $collection->update([
-                'is_paid' => true,
-                'total_amount_paid' => $collection->total_amount_paid + $transactionOnlinePayment->data['payment']['amount'],
             ]);
         }
     }
@@ -47,7 +42,7 @@ class TransactionOnlinePaymentObserver
      */
     public function updated(TransactionOnlinePayment $transactionOnlinePayment)
     {
-        if($transactionOnlinePayment->is_reverse && $transactionOnlinePayment->data['payment']['status'] == 'confirmed'){
+        if($transactionOnlinePayment->is_reverse && $transactionOnlinePayment->data['status'] == 'PAID'){
             $collectionPayment = CollectionPaymentDetail::firstWhere('transaction_online_payment_id',$transactionOnlinePayment->id);
             $collectionPayment->delete();
         }

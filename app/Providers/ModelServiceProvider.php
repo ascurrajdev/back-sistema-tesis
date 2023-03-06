@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\ReservationDetail;
 use App\Models\Product;
 use App\Models\Collection;
+use App\Models\InvoiceDue;
+use App\Observers\InvoiceDueObserver;
 use App\Models\TransactionOnlinePayment;
 use App\Observers\CollectionObserver;
 use App\Observers\ReservationDetailObserver;
@@ -34,5 +36,6 @@ class ModelServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         TransactionOnlinePayment::observe(TransactionOnlinePaymentObserver::class);
         Collection::observe(CollectionObserver::class);
+        InvoiceDue::observe(InvoiceDueObserver::class);
     }
 }

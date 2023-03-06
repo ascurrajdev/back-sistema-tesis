@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->boolean('is_online_transaction');
+            $table->boolean('is_online_transaction')->nullable()->default(false);
         });
     }
 

@@ -67,11 +67,12 @@ class TransactionOnlinePaymentsController extends Controller
         switch($paymentData['status']){
             case "PAID":
                 CollectionPaymentDetail::create([
+                    'collection_id' => $collection->id,
                     'currency_id' => $collection->currency_id,
                     'amount' => $paymentData['amount'],
                     'transaction_online_payment_id' => $transaction->id
                 ]);
-                $collection->total_amount_paid = $paymentData['amount'];
+                $collection->total_amount_paid += $paymentData['amount'];
                 if($collection->total_amount_paid == $collection->total_amount){
                     $collection->is_paid = true;
                 }

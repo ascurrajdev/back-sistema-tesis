@@ -3,6 +3,7 @@ namespace App\Services;
 use App\Contracts\PaymentService;
 use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
+use Log;
 class DlocalPaymentService implements PaymentService{
 
     private $apiKey;
@@ -17,6 +18,7 @@ class DlocalPaymentService implements PaymentService{
         $location = Location::get(request()->ip());
         $currency = "PYG";
         $country = "PY";
+        Log::info(url("/api/online-payments/dlocal/notification"));
         if(!empty($location->countryCode)){
             $country = $location->countryCode;
             $currency = config('currencies-country-codes'.$country,'PYG');
@@ -34,7 +36,7 @@ class DlocalPaymentService implements PaymentService{
                 'email' => $client->email,
             ],
             'success_url' => "http://localhost:5173/guards/clients/reservations/add?step=4",
-            'notification_url' => " https://0914-2803-2a00-2c15-e181-f144-a664-6a9b-6cec.ngrok.io/api/online-payments/dlocal/notification"
+            'notification_url' => env("APP_URL")."/api/online-payments/dlocal/notification"
         ]);
         return $response->json();
     }

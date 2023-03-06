@@ -18,4 +18,8 @@ class InvoiceDue extends Model
     public function reservation(){
         return $this->belongsTo(Reservation::class);
     }
+
+    public function invoice(){
+        return $this->belongsTo(Invoice::class);
+    }
 }
