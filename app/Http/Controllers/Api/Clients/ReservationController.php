@@ -17,6 +17,7 @@ use App\Http\Resources\ReservationLimitResource;
 use App\Http\Requests\ReservationSaveRequest;
 use App\Http\Resources\collections\ReservationBillingCollection;
 use DB;
+use Log;
 use App\Http\Resources\ProductResource;
 
 class ReservationController extends Controller{
@@ -158,9 +159,12 @@ class ReservationController extends Controller{
         $collections = DB::table('collections')
         ->whereRaw("id in (SELECT collection_id From collection_details where invoice_due_id in (select id from invoice_dues where reservation_id = ?))",[$reservationId])
         ->get();
-        
+        $totalReservation = DB::table('invoices')->selectRaw('sum(total_amount) as total')
+        ->whereRaw('id in (select invoice_id from reservation_invoices_details where reservation_id = ?)',[$reservationId])
+        ->first();
+        Log::info(json_encode($totalReservation));
         return (new ReservationBillingCollection($collections->all()))->additional([
-            'amount_pending_paid' => 10000
+            'amount_pending_paid' => $totalReservation->total
         ]);
     }
 

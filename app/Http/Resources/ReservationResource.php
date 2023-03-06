@@ -25,7 +25,7 @@ class ReservationResource extends JsonResource
             'currency' => new CurrencyResource($this->whenLoaded('currency')),
             'client' => new ClientResource($this->whenLoaded('client')),
             'agency' => new AgencyResource($this->whenLoaded('agency')),
-            'invoiceDue' => new InvoiceDueResource($this->whenLoaded('invoiceDue')),
+            'invoiceDue' => InvoiceDueResource::collection($this->whenLoaded('invoiceDue')),
             'details' => ReservationDetailsResource::collection($this->whenLoaded('detailsReservation')),
         ];
     }
