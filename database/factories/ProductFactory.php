@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Currency;
+use App\Models\Tax;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
@@ -25,6 +26,7 @@ class ProductFactory extends Factory
             'amount_untaxed' => 10000,
             'currency_id' => Currency::factory(),
             'user_id' => User::factory(),
+            'tax_id' => Tax::factory(),
             'active_for_reservation' => true,
             'stockable' => false,
             'is_lodging' => true,

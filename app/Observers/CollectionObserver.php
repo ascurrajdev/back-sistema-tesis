@@ -24,7 +24,7 @@ class CollectionObserver
                 }
                 $detail->invoiceDue->paid = true;
                 $detail->invoiceDue->save();
-            } 
+            }
             if($sendConfirmationReserved){
                 // $client = $collection->client;
                 // $client->notify(new SendConfirmationReserved());

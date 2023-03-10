@@ -82,6 +82,7 @@ class ReservationController extends Controller{
         }
         $reservation = Reservation::create($reservationArray);
         $invoice = Invoice::create([
+            'reservation_id' => $reservation->id,
             'total_amount' => $reservationArray['total_amount'],
             'total_discount' => $reservationArray['total_discount'],
             'total_paid' => 0,
@@ -116,7 +117,6 @@ class ReservationController extends Controller{
         };
         $invoice->details()->createMany($invoiceDetails);
         $reservation->reservationDetail()->createMany($reservationDetails);
-        $reservation->invoice()->attach($invoice->id);
         $this->calculateConfigsReservation($reservation, $invoice);
         $reservation->load('invoiceDue');
         return new ReservationResource($reservation);
@@ -166,7 +166,7 @@ class ReservationController extends Controller{
         $request->validate([
             'amount' => ['required','integer']
         ]);
-        $invoices = $reservation->invoice()
+        $invoices = $reservation->invoices()
         ->where('operation_type','credito')
         ->where('paid_cancelled',false)
         ->get();
@@ -234,8 +234,9 @@ class ReservationController extends Controller{
         $reservationId = $reservation->id;
         $collections = DB::table('collections')
         ->whereRaw("id in (SELECT collection_id From collection_details where invoice_due_id in (select id from invoice_dues where reservation_id = ?))",[$reservationId])
+        ->whereRaw("is_paid = true")
         ->get();
-        $totalReservation = DB::table('invoices')->selectRaw('sum(total_amount) as total')
+        $totalReservation = DB::table('invoices')->selectRaw('sum(total_amount - total_paid) as total')
         ->whereRaw('id in (select invoice_id from reservation_invoices_details where reservation_id = ?)',[$reservationId])
         ->first();
         Log::info(json_encode($totalReservation));

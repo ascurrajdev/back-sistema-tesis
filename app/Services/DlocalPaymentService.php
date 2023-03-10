@@ -14,10 +14,14 @@ class DlocalPaymentService implements PaymentService{
         $this->apiKey = config('dlocal.api_key');
         $this->secretKey = config('dlocal.secret_key');
     }
-    public function createLinkPayment($client,$amount,$description){
+    public function createLinkPayment($client,$amount,$description,$options = []){
         $location = Location::get(request()->ip());
         $currency = "PYG";
         $country = "PY";
+        $successUrl = "http://localhost:5173/guards/clients/reservations/add?step=4";
+        if(!empty($options) && is_array($options)){
+            extract($options);
+        }
         Log::info(url("/api/online-payments/dlocal/notification"));
         if(!empty($location->countryCode)){
             $country = $location->countryCode;
@@ -35,7 +39,7 @@ class DlocalPaymentService implements PaymentService{
                 'name' => $client->name,
                 'email' => $client->email,
             ],
-            'success_url' => "http://localhost:5173/guards/clients/reservations/add?step=4",
+            'success_url' => $successUrl,
             'notification_url' => env("APP_URL")."/api/online-payments/dlocal/notification"
         ]);
         return $response->json();

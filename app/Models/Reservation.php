@@ -27,8 +27,8 @@ class Reservation extends Model
         return $this->hasMany(InvoiceDue::class,'reservation_id');
     }
 
-    public function invoice(){
-        return $this->belongsToMany(Invoice::class,'reservation_invoices_details','reservation_id','invoice_id');
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
     }
 
     public function reservationDetail(){
