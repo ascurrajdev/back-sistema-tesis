@@ -31,6 +31,7 @@ Route::prefix("clients")->name("clients.")->group(function(){
     Route::middleware("auth:sanctum")->group(function(){
         Route::put("",[ClientController::class,"update"])->name('update');
         Route::get("",[ClientController::class,"getUser"]);
+        Route::get("statistics",[ClientController::class,"statistics"])->name("statistics");
         Route::prefix("reservations")->name("reservations.")->group(function(){
             Route::get("products",[ReservationController::class,'products'])->name('products');
             Route::get("availabilities",[ReservationController::class,"availabilities"])->name("availabilities");

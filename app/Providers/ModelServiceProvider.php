@@ -39,6 +39,6 @@ class ModelServiceProvider extends ServiceProvider
         TransactionOnlinePayment::observe(TransactionOnlinePaymentObserver::class);
         Collection::observe(CollectionObserver::class);
         InvoiceDue::observe(InvoiceDueObserver::class);
-        Invoice::observe(InvoiceObserver::class)
+        Invoice::observe(InvoiceObserver::class);
     }
 }
