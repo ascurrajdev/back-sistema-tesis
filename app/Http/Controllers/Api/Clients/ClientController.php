@@ -23,7 +23,7 @@ class ClientController extends Controller{
     }
 
     public function statistics(){
-        $result = DB::table('reservations')->selectRaw("count(1) as cantidad, case when active = true THEN 'RESERVACIONES' ELSE 'PRESUPUESTOS' END AS tipo")
+        $result = DB::table('reservations')->selectRaw("count(1) as quantity, case when active = true THEN 'RESERVACIONES' ELSE 'PRESUPUESTOS' END AS type")
         ->groupBy('active')->get();
         return $this->success($result);
     }
