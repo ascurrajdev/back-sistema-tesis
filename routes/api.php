@@ -40,6 +40,7 @@ Route::prefix("clients")->name("clients.")->group(function(){
             Route::get("{reservation}",[ReservationController::class,"view"])->name("view");
             Route::get("{reservation}/billing",[ReservationController::class,"billing"])->name("billing");
             Route::put("{reservation}",[ReservationController::class,"update"])->name("update");
+            Route::post("{reservation}/make-payment",[ReservationController::class,"makePayment"])->name("makePayment");
         });
         Route::prefix('invoice_due')->name('invoice_due.')->group(function(){
             Route::get('payment/{invoiceDue}',[InvoiceDueController::class,'payment'])->name('payment');

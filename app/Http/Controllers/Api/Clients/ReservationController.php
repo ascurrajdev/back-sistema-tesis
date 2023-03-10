@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\Clients;
+
+use App\Contracts\PaymentService;
 use App\Models\Reservation;
 use App\Models\ReservationLimit;
 use App\Models\Product;
@@ -19,10 +21,17 @@ use App\Http\Resources\collections\ReservationBillingCollection;
 use DB;
 use Log;
 use App\Http\Resources\ProductResource;
+use App\Models\Collection;
 
 class ReservationController extends Controller{
     use ResponseTrait;
 
+    private $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
     public function index(Request $request){
         $client = $request->user();
         $reservations = Reservation::query();
@@ -151,6 +160,73 @@ class ReservationController extends Controller{
         $this->authorizeForUser($request->user(),"view",$reservation);
         $reservation->load(['reservationDetail','agency','currency']);
         return new ReservationResource($reservation);
+    }
+
+    public function makePayment(Reservation $reservation, Request $request){
+        $request->validate([
+            'amount' => ['required','integer']
+        ]);
+        $invoices = $reservation->invoice()
+        ->where('operation_type','credito')
+        ->where('paid_cancelled',false)
+        ->get();
+        $amountPaid = $request->amount;
+        $invoicesSelected = [];
+        foreach($invoices as $invoice){
+            $balance = $invoice->total_amount - $invoice->total_paid;
+            if($amountPaid > 0){
+                if($balance > $amountPaid){
+                    $invoicesSelected[] = [
+                        'invoice_id' => $invoice->id,
+                        'reservation_id' => $reservation->id,
+                        'amount' => $amountPaid,
+                        'currency_id' => $invoice->currency_id,
+                        'agency_id' => $invoice->agency_id,
+                        'expiration_date' => now()->addDay(1),
+                    ];
+                    $amountPaid = 0; 
+                }else if($balance < $amountPaid){
+                    $invoicesSelected[] = [
+                        'invoice_id' => $invoice->id,
+                        'reservation_id' => $reservation->id,
+                        'amount' => $balance,
+                        'currency_id' => $invoice->currency_id,
+                        'agency_id' => $invoice->agency_id,
+                        'expiration_date' => now()->addDay(1),
+                    ];
+                    $amountPaid -= $balance;
+                }
+            }
+        }
+        $invoiceDues = [];
+        foreach($invoicesSelected as $invoice){
+            $invoiceDues[] = InvoiceDue::create($invoice);
+        }
+
+        $collection = Collection::create([
+            'total_amount' => $request->amount,
+            'total_amount_paid' => 0,
+            'is_paid' => 0,
+            'currency_id' => $invoiceDues[0]->currency_id,
+            'agency_id' => $invoiceDues[0]->agency_id,
+            'client_id' => $request->user()->id,
+        ]);
+        $collectionDetails = [];
+        foreach($invoiceDues as $invoiceDue){
+            $collectionDetails[] = [
+                'invoice_due_id' => $invoiceDue->id,
+                'concept' => "Pago por adelanto de la Reservacion {$reservation->id}",
+                'currency_id' => $invoiceDue->currency_id,
+                'amount' => $invoiceDue->amount,
+            ];
+        }
+        $collection->details()->createMany($collectionDetails);
+        $paymentLink = $this->paymentService->createLinkPayment($request->user(),$collection->total_amount,"Pago adelantado por la Reservacion {$reservation->id}");
+        $collection->link_payment = $paymentLink['redirect_url'];
+        $collection->hook_alias_payment = $paymentLink['merchant_checkout_token'];
+        $collection->payment_online_id = $paymentLink['id'];
+        $collection->save();
+        return $this->success($collection->link_payment);
     }
 
     public function billing(Reservation $reservation, Request $request){
