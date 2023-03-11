@@ -177,22 +177,26 @@ class ReservationController extends Controller{
             if($amountPaid > 0){
                 if($balance > $amountPaid){
                     $invoicesSelected[] = [
+                        'number_due' => 1,
                         'invoice_id' => $invoice->id,
                         'reservation_id' => $reservation->id,
                         'amount' => $amountPaid,
                         'currency_id' => $invoice->currency_id,
                         'agency_id' => $invoice->agency_id,
                         'expiration_date' => now()->addDay(1),
+                        'is_initial_reservation_payment' => 0,
                     ];
                     $amountPaid = 0; 
                 }else if($balance < $amountPaid){
                     $invoicesSelected[] = [
+                        'number_due' => 1,
                         'invoice_id' => $invoice->id,
                         'reservation_id' => $reservation->id,
                         'amount' => $balance,
                         'currency_id' => $invoice->currency_id,
                         'agency_id' => $invoice->agency_id,
                         'expiration_date' => now()->addDay(1),
+                        'is_initial_reservation_payment' => 0,
                     ];
                     $amountPaid -= $balance;
                 }
@@ -200,9 +204,9 @@ class ReservationController extends Controller{
         }
         $invoiceDues = [];
         foreach($invoicesSelected as $invoice){
-            $invoiceDues[] = InvoiceDue::create($invoice);
+            $invoiceDue = InvoiceDue::create($invoice);
+            $invoiceDues[] = $invoiceDue;
         }
-
         $collection = Collection::create([
             'total_amount' => $request->amount,
             'total_amount_paid' => 0,
