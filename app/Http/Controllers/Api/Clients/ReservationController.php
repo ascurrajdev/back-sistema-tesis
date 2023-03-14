@@ -241,9 +241,8 @@ class ReservationController extends Controller{
         ->whereRaw("is_paid = true")
         ->get();
         $totalReservation = DB::table('invoices')->selectRaw('sum(total_amount - total_paid) as total')
-        ->whereRaw('id in (select invoice_id from reservation_invoices_details where reservation_id = ?)',[$reservationId])
+        ->whereRaw('reservation_id in (?)',[$reservationId])
         ->first();
-        Log::info(json_encode($totalReservation));
         return (new ReservationBillingCollection($collections->all()))->additional([
             'amount_pending_paid' => $totalReservation->total
         ]);
