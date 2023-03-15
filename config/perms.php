@@ -1,17 +1,53 @@
 <?php
 return [
     'products' => [
-        'products-view',
-        'products-index',
-        'products-store',
-        'products-update',
-        'products-delete'
+        'label' => 'Productos',
+        'children' => [
+            [
+                'label' => 'Ver',
+                'value' => 'products-view',
+            ],
+            [
+                'label' => 'Listar',
+                'value' => 'products-index',
+            ],
+            [
+                'label' => 'Crear',
+                'value' => 'products-store',
+            ],
+            [
+                'label' => 'Actualizar',
+                'value' => 'products-update',
+            ],
+            [
+                'label' => 'Eliminar',
+                'value' => 'products-delete',
+            ],
+        ]
     ],
     'roles-users' => [
-        'roles-users-index',
-        'roles-users-view',
-        'roles-users-store',
-        'roles-users-update',
-        'roles-users-delete'
+        'label' => 'Roles de Usuario',
+        'children' => [
+            [
+                'label' => 'Listar',
+                'value' => 'roles-users-index'
+            ],
+            [
+                'label' => 'Ver',
+                'value' => 'roles-users-view'
+            ],
+            [
+                'label' => 'Crear',
+                'value' => 'roles-users-store'
+            ],
+            [
+                'label' => 'Actualizar',
+                'value' => 'roles-users-update'
+            ],
+            [
+                'label' => 'Eliminar',
+                'value' => 'roles-users-delete'
+            ],
+        ]
     ]
 ];

@@ -24,7 +24,9 @@ class RolesUserController extends Controller
 
     public function view(RoleUser $role){
         $this->authorize('view',$role);
-        return new RoleUserResource($role);
+        return (new RoleUserResource($role))->additional([
+            'roles_available' => config('perms')
+        ]);
     }
 
     public function store(RoleUserSaveRequest $request){
