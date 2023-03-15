@@ -18,7 +18,10 @@ class RoleUserFactory extends Factory
     {
         return [
             'name' => fake()->title(),
-            'abilities' => ['products-index']
+            'abilities' => [
+                'products-index',
+                'roles-users-index'
+            ]
         ];
     }
 }

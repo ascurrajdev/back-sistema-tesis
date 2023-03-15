@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserResource;
+use Log;
 
 class LoginController extends Controller{
     use ResponseTrait;
@@ -44,7 +45,12 @@ class LoginController extends Controller{
                 "email" => trans("auth.failed"),
             ]);
         }
-        $token = $user->createToken($request->ip());
+        $user->load('role');
+        $abilities = [];
+        if(!empty($user->role->abilities)){
+            $abilities = $user->role->abilities;
+        }
+        $token = $user->createToken($request->ip(),$abilities);
         return $this->success([
             'token' => [
                 'plainTextToken' => $token->plainTextToken,
