@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserResource;
-use Log;
 
 class LoginController extends Controller{
     use ResponseTrait;
