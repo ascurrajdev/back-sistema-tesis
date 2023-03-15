@@ -60,7 +60,7 @@ Route::prefix("users")->name("users.")->group(function(){
             Route::delete('{product}',[ProductsController::class,'delete'])->name('delete');
         });
         Route::prefix('roles')->name('roles.')->group(function(){
-            Route::get('abilities',[[RolesUserController::class,'abilities']])->name('abilities');
+            Route::get('abilities',[RolesUserController::class,'abilities'])->name('abilities');
             Route::get('',[RolesUserController::class,'index'])->name('index');
             Route::get('{role}',[RolesUserController::class,'view'])->name('view');
             Route::post('',[RolesUserController::class,'store'])->name('store');
