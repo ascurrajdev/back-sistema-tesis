@@ -10,7 +10,7 @@ class UsersController extends Controller{
 
     public function index(){
         $this->authorize('viewAny',User::class);
-        return UserResource::collection(User::all());
+        return UserResource::collection(User::with('role')->get());
     }
 
     public function view(User $user){
@@ -24,7 +24,7 @@ class UsersController extends Controller{
             'name' => ['required','string'],
             'email' => ['required','email','unique:users'],
             'password' => ['required','min:8'],
-            'role_id' => ['required','exists:roles,id']
+            'role_id' => ['required','exists:role_users,id']
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -40,11 +40,15 @@ class UsersController extends Controller{
         $this->authorize('update',$user);
         $request->validate([
             'name' => ['string'],
-            'email' => ['email','unique:users'],
+            'email' => ['email'],
             'password' => ['min:8'],
-            'role_id' => ['exists:roles,id']
+            'role_id' => ['exists:role_users,id']
         ]);
-        $user->fill($request->all());
+        $params = $request->all();
+        if(array_key_exists('password',$params)){
+            $params['password'] = Hash::make($request->password);
+        }
+        $user->fill($params);
         $user->save();
         return new UserResource($user);
     }
