@@ -15,6 +15,8 @@ class AgencyResource extends JsonResource
             'address' => $this->resource->address,
             'city' => $this->resource->city,
             'neighborhood' => $this->resource->neighborhood,
+            'active' => $this->resource->active,
+            'active_for_reservations_online' => $this->resource->active_for_reservations_online,
         ]; 
     }
 }

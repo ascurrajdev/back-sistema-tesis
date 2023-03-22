@@ -14,6 +14,7 @@ class PaymentResource extends JsonResource
             'is_card' => $this->resource->is_card,
             'is_cash' => $this->resource->is_cash,
             'is_transfer_bank' => $this->resource->is_transfer_bank,
+            'is_online_transaction' => $this->resource->is_online_transaction,
             'type_card' => $this->resource->type_card,
         ];
     }
