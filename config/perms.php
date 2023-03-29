@@ -49,5 +49,89 @@ return [
                 'value' => 'roles-users-delete'
             ],
         ]
-    ]
+    ],
+    'agencies-users' => [
+        'label' => 'Sucursales',
+        'children' => [
+            [
+                'label' => 'Listar',
+                'value' => 'agencies-index'
+            ],
+            [
+                'label' => 'Ver',
+                'value' => 'agencies-view'
+            ],
+            [
+                'label' => 'Crear',
+                'value' => 'agencies-store'
+            ],
+            [
+                'label' => 'Actualizar',
+                'value' => 'agencies-update'
+            ],
+            [
+                'label' => 'Eliminar',
+                'value' => 'agencies-delete'
+            ]
+        ]
+    ],
+    'currencies-users' => [
+        'label' => 'Monedas',
+        'children' => [
+            [
+                'label' => 'Listar',
+                'value' => 'currencies-index',
+            ],
+            [
+                'label' => 'Ver',
+                'value' => 'currencies-view',
+            ],
+            [
+                'label' => 'Crear',
+                'value' => 'currencies-store'
+            ],
+            [
+                'label' => 'Actualizar',
+                'value' => 'currencies-update'
+            ],
+            [
+                'label' => 'Eliminar',
+                'value' => 'currencies-delete'
+            ]
+        ]
+    ],
+    'payments-users' => [
+        'label' => 'Pagos',
+        'children' => [
+            [
+                'label' => 'Listar',
+                'value' => 'payments-index'
+            ],
+            [
+                'label' => 'Crear',
+                'value' => 'payments-store'
+            ],
+            [
+                'label' => 'Ver',
+                'value' => 'payments-view'
+            ],
+            [
+                'label' => 'Actualizar',
+                'value' => 'payments-update'
+            ],
+            [
+                'label' => 'Eliminar',
+                'value' => 'payments-delete'
+            ]
+        ]
+    ],
+    'invoices-users' => [
+        'label' => 'Facturas',
+        'children' => [
+            [
+                'label' => 'Listar',
+                'value' => 'invoices-index'
+            ]
+        ]
+    ]        
 ];

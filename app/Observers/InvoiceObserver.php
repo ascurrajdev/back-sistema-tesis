@@ -14,10 +14,12 @@ class InvoiceObserver
      */
     public function saved(Invoice $invoice)
     {
-        $invoice->load('reservation');
-        if($invoice->has('reservation')){
-            $invoice->reservation->total_amount = $invoice->total_amount - $invoice->total_paid;
-            $invoice->reservation->save();
+        if(!empty($invoice->reservation_id)){
+            $invoice->load('reservation');
+            if($invoice->has('reservation')){
+                $invoice->reservation->total_amount = $invoice->total_amount - $invoice->total_paid;
+                $invoice->reservation->save();
+            }
         }
     }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Clients\InvoiceDueController;
 use App\Http\Controllers\Api\Clients\TransactionOnlinePaymentsController;
 use App\Http\Controllers\Api\Users\AgenciesController;
 use App\Http\Controllers\Api\Users\CurrencyController;
+use App\Http\Controllers\Api\Users\InvoicesController;
 use App\Http\Controllers\Api\Users\PaymentsController;
 use App\Http\Controllers\Api\Users\ProductsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
@@ -52,6 +53,9 @@ Route::prefix("users")->name("users.")->group(function(){
     Route::post("login",[LoginController::class,"loginUser"])->name("login");
     Route::post("register",[RegisterController::class,"registerUser"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
+        Route::prefix('invoices')->name('invoices.')->group(function(){
+            Route::get('',[InvoicesController::class,'index'])->name('index');
+        });
         Route::prefix('products')->name('products.')->group(function(){
             Route::get('',[ProductsController::class,'index'])->name('index');
             Route::get('{product}',[ProductsController::class,'view'])->name('view');
