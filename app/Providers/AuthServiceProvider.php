@@ -12,8 +12,11 @@ use App\Models\Reservation;
 use App\Models\RoleUser;
 use App\Models\User;
 use App\Models\Currency;
+use App\Models\Invoice;
 use App\Policies\AgencyPolicy;
+use App\Policies\CollectionPolicy;
 use App\Policies\CurrenciesPolicy;
+use App\Policies\InvoicePolicy;
 use App\Policies\PaymentsPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\UserPolicy;
@@ -34,6 +37,8 @@ class AuthServiceProvider extends ServiceProvider
         Payment::class => PaymentsPolicy::class,
         Currency::class => CurrenciesPolicy::class,
         Agency::class => AgencyPolicy::class,
+        Invoice::class => InvoicePolicy::class,
+        Collection::class => CollectionPolicy::class
     ];
 
     /**

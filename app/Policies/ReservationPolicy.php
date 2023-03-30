@@ -4,11 +4,24 @@ namespace App\Policies;
 
 use App\Models\Reservation;
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ReservationPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Reservation  $reservation
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function viewAny($user)
+    {
+        return $user->tokenCan('reservations-index');
+    }
 
     /**
      * Determine whether the user can view the model.

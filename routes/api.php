@@ -8,10 +8,12 @@ use App\Http\Controllers\Api\Clients\ClientController;
 use App\Http\Controllers\Api\Clients\InvoiceDueController;
 use App\Http\Controllers\Api\Clients\TransactionOnlinePaymentsController;
 use App\Http\Controllers\Api\Users\AgenciesController;
+use App\Http\Controllers\Api\Users\CollectionsController;
 use App\Http\Controllers\Api\Users\CurrencyController;
 use App\Http\Controllers\Api\Users\InvoicesController;
 use App\Http\Controllers\Api\Users\PaymentsController;
 use App\Http\Controllers\Api\Users\ProductsController;
+use App\Http\Controllers\Api\Users\ReservationsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
 use App\Http\Controllers\Api\Users\UsersController;
 
@@ -55,6 +57,12 @@ Route::prefix("users")->name("users.")->group(function(){
     Route::middleware("auth:sanctum")->group(function(){
         Route::prefix('invoices')->name('invoices.')->group(function(){
             Route::get('',[InvoicesController::class,'index'])->name('index');
+        });
+        Route::prefix('collections')->name('collections.')->group(function(){
+            Route::get('',[CollectionsController::class,'index'])->name('index');
+        });
+        Route::prefix('reservations')->name('reservations.')->group(function(){
+            Route::get('',[ReservationsController::class,'index'])->name('index');
         });
         Route::prefix('products')->name('products.')->group(function(){
             Route::get('',[ProductsController::class,'index'])->name('index');
