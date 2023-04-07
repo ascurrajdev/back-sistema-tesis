@@ -26,7 +26,7 @@ class ProductUpdateRequest extends FormRequest
         return [
             "name" => ['string','min:3'],
             'amount' => ['numeric'],
-            'tax_id' => ['exists:taxes,id'],
+            'tax_id' => ['exists:taxes,id','nullable'],
             'currency_id' => ['exists:currencies,id'],
             'active_for_reservation' => ['boolean'],
             'is_lodging' => ['boolean'],

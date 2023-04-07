@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\Users;
 use App\Models\Product;
+use App\Models\Currency;
 use App\Http\Resources\ProductResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductSaveRequest;
@@ -19,12 +20,13 @@ class ProductsController extends Controller{
 
     public function store(ProductSaveRequest $request){
         $params = $request->validated();
+        $currency = Currency::firstWhere("default",true);
         $product = Product::create(array_filter([
             "name" => $params['name'],
             'amount' => $params['amount'],
             'amount_untaxed' => 0,
             'tax_id' => $params['tax_id'] ?? null,
-            'currency_id' => $params['currency_id'],
+            'currency_id' => $currency->id,
             'user_id' => $request->user()->id,
             'active_for_reservation' => $params['active_for_reservation'],
             'is_lodging' => $params['is_lodging'],
@@ -37,7 +39,7 @@ class ProductsController extends Controller{
 
     public function update(Product $product,ProductUpdateRequest $request){
         $params = $request->validated();
-        $product->fill(array_filter($params));
+        $product->fill($params);
         $product->save();
         return new ProductResource($product);
     }

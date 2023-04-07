@@ -21,11 +21,10 @@ class StoreProductsTest extends TestCase
             User::factory()->create(),
             ["products-store"]
         );
-        $currency = Currency::factory()->create();
+        Currency::factory()->create();
         $response = $this->postJson(route('api.users.products.store'),[
             'name' => 'Hotel Fachero',
             'amount' => 1000000,
-            'currency_id' => $currency->id,
             'is_lodging' => 1,
             'active_for_reservation' => 1,
             'capacity_for_day_max' => 10,

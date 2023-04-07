@@ -26,8 +26,8 @@ class ProductSaveRequest extends FormRequest
         return [
             "name" => ['required','string','min:3'],
             'amount' => ['required','numeric'],
-            'tax_id' => ['exists:taxes,id'],
-            'currency_id' => ['required','exists:currencies,id'],
+            'tax_id' => ['exists:taxes,id',"nullable"],
+            // 'currency_id' => ['required','exists:currencies,id'],
             'active_for_reservation' => ['required_with_all:is_lodging,capacity_for_day_max,capacity_for_day_min'],
             'is_lodging' => ['boolean'],
             'capacity_for_day_max' => ['required_with_all:is_lodging,active_for_reservation,capacity_for_day_min'],
