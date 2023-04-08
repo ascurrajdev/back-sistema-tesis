@@ -7,10 +7,13 @@ class CurrencyCodesController extends Controller
 {
     use ResponseTrait;
     public function index(){
-        $currencyCountries = [];
-        foreach(config('country-codes') as $code => $country){
-            $currencyCountries[$code] = config('currencies-country-codes')[$code];
+        $currencyCodes = [];
+        foreach(config('currency-codes') as $code => $currency){
+            $currencyCodes[] = [
+                'label' => $currency,
+                'value' => $code,
+            ];
         }
-        return $this->success($currencyCountries);
+        return $this->success($currencyCodes);
     }
 }
