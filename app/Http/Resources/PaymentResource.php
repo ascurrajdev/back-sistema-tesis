@@ -16,6 +16,7 @@ class PaymentResource extends JsonResource
             'is_transfer_bank' => $this->resource->is_transfer_bank,
             'is_online_transaction' => $this->resource->is_online_transaction,
             'type_card' => $this->resource->type_card,
+            'required_vaucher' => $this->resource->required_vaucher,
         ];
     }
 }

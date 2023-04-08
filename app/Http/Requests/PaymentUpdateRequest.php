@@ -30,7 +30,8 @@ class PaymentUpdateRequest extends FormRequest
             'type_card' => [Rule::in(['credit','debit']),'required_with:is_card'],
             'is_cash' => ['boolean'],
             'is_transfer_bank' => ['boolean'],
-            'required_vaucher' => ['boolean']
+            'required_vaucher' => ['boolean'],
+            'is_online_transaction' => ['boolean']
         ];
     }
 }
