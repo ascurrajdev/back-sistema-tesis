@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Users\ProductsController;
 use App\Http\Controllers\Api\Users\ReservationsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
 use App\Http\Controllers\Api\Users\UsersController;
+use App\Http\Controllers\CurrencyCodesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,3 +111,4 @@ Route::prefix("users")->name("users.")->group(function(){
 
 Route::post('online-payments/callback',[TransactionOnlinePaymentsController::class,'callback'])->name('online-payments.callback');
 Route::post('online-payments/dlocal/notification',[TransactionOnlinePaymentsController::class,'dlocalNotification'])->name('online-payments.dlocal.notifcation');
+Route::get('currency-codes',[CurrencyCodesController::class,'index'])->name('currency-codes.index');
