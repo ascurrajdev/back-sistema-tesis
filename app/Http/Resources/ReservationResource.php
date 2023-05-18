@@ -22,6 +22,7 @@ class ReservationResource extends JsonResource
             'total_amount' => $this->resource->total_amount,
             'notes' => $this->resource->notes,
             'active' => $this->resource->active,
+            'created_at' => $this->resource->created_at->format("d/m/Y H:i:s"),
             'currency' => new CurrencyResource($this->whenLoaded('currency')),
             'client' => new ClientResource($this->whenLoaded('client')),
             'agency' => new AgencyResource($this->whenLoaded('agency')),

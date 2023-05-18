@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 class ReservationsController extends Controller
@@ -12,10 +13,15 @@ class ReservationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny',Reservation::class);
-        return Reservation::paginate(10);
+        $query = Reservation::query();
+        $query->orderBy("id","desc");
+        foreach($request->input('order',[]) as $key => $order){
+            $query->orderBy($key,$order == "+" ? "asc" : "desc");
+        }
+        return ReservationResource::collection($query->get());
     }
 
     /**

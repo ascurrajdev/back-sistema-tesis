@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Users\ReservationsController;
 use App\Http\Controllers\Api\Users\RolesUserController;
 use App\Http\Controllers\Api\Users\UsersController;
 use App\Http\Controllers\CurrencyCodesController;
+use App\Http\Controllers\Api\Users\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,9 @@ Route::prefix("users")->name("users.")->group(function(){
     Route::post("login",[LoginController::class,"loginUser"])->name("login");
     Route::post("register",[RegisterController::class,"registerUser"])->name("register");
     Route::middleware("auth:sanctum")->group(function(){
+        Route::prefix('statistics')->name('statistics.')->group(function(){
+            Route::get('summary', [StatisticsController::class, 'index_summary'])->name('index_summary');
+        });
         Route::prefix('invoices')->name('invoices.')->group(function(){
             Route::get('',[InvoicesController::class,'index'])->name('index');
         });
