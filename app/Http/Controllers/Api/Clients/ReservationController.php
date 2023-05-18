@@ -65,6 +65,12 @@ class ReservationController extends Controller{
         })->all();
         $products = Product::whereIn("id",$productIds)->get();
         $totalAmountUntaxed = 0;
+        $fromDate = date_create($reservationArray['date_from']);
+        $toDate = date_create($reservationArray['date_to']);
+        $intervalDays = $fromDate->diff($toDate)->days;
+        if(empty($intervalDays)){
+            $intervalDays = 1;
+        }
         foreach($params["details"] as $key => $detail){
             $productSelected = $products->where("id",$detail["product_id"])->first();
             if($productSelected->is_lodging){
@@ -77,8 +83,9 @@ class ReservationController extends Controller{
             $params["details"][$key]["tax_id"] = $productSelected->tax_id;
             $params["details"][$key]["tax_rate"] = $productSelected->tax_rate;
             $params["details"][$key]["amount_untaxed"] = $productSelected->amount - ($productSelected->amount / 11 * $productSelected->tax_rate);
-            $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"];
-            $totalAmountUntaxed += $productSelected->amount / 11 * $productSelected->tax_rate;
+
+            $reservationArray["total_amount"] += $productSelected["amount"] * $detail["quantity"] * $intervalDays;
+            $totalAmountUntaxed += $productSelected->amount / 11 * ($productSelected->tax_rate ?? 0);
         }
         $reservation = Reservation::create($reservationArray);
         $invoice = Invoice::create([
