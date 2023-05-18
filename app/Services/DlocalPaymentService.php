@@ -18,7 +18,7 @@ class DlocalPaymentService implements PaymentService{
         $location = Location::get(request()->ip());
         $currency = "PYG";
         $country = "PY";
-        $successUrl = "http://localhost:5173/guards/clients/reservations/add?step=4";
+        $successUrl = "http://127.0.0.1:5173/guards/clients/reservations/add?step=4";
         if(!empty($options) && is_array($options)){
             extract($options);
         }
