@@ -17,7 +17,7 @@ class InvoicesController extends Controller
     public function index()
     {
         $this->authorize('viewAny',Invoice::class);
-        $invoices = Invoice::with('details')->get();
+        $invoices = Invoice::with('details')->orderBy('id','desc')->get();
         return InvoiceResource::collection($invoices);
     }
 

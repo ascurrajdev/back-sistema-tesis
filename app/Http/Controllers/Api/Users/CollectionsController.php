@@ -18,7 +18,7 @@ class CollectionsController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Collection::class);
-        $collections = Collection::get();
+        $collections = Collection::orderBy('id','desc')->get();
         return CollectionResource::collection($collections);
     }
 
