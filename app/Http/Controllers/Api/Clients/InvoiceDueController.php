@@ -48,6 +48,7 @@ class InvoiceDueController extends Controller
             $description[] = $detail->concept;
         }
         $paymentLink = $this->paymentService->createLinkPayment($request->user(),$collection->total_amount,implode(',',$description));
+        info($paymentLink);
         if($paymentLink['status'] == 'error'){
             return $this->error($paymentLink,400);
         }

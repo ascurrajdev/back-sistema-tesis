@@ -25,13 +25,14 @@ class ReservationDetailObserver
             foreach($intervalArray as $date){
                 $reservationLimit = array();
                 $reservationSelected = $reservationLimits->where('date',$date)->where('product_id',$reservationDetail->product_id)->first();
+
                 if(empty($reservationSelected)){
                     $reservationLimit['capacity_min'] = $reservationDetail->product->capacity_for_day_min;
                     $reservationLimit['capacity_max'] = $reservationDetail->product->capacity_for_day_max;
                     $reservationLimit['available'] = $reservationDetail->product->capacity_for_day_max - $reservationDetail->quantity;
                 }else{
-                    $reservationLimit['available'] -= $reservationDetail->quantity;
-                    $reservationLimit['id'] = $reservationDetail->id;
+                    $reservationLimit['available'] = $reservationSelected->available - $reservationDetail->quantity;
+                    $reservationLimit['id'] = $reservationSelected->id;
                 }
                 $reservationLimit['date'] = $date;
                 $reservationLimit['product_id'] = $reservationDetail->product_id;
