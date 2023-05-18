@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceResource;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
 
@@ -16,8 +17,8 @@ class InvoicesController extends Controller
     public function index()
     {
         $this->authorize('viewAny',Invoice::class);
-        $invoices = Invoice::with('details')->paginate(10);
-        return $invoices;
+        $invoices = Invoice::with('details')->get();
+        return InvoiceResource::collection($invoices);
     }
 
     /**

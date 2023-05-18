@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CollectionResource;
 use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Traits\ResponseTrait;
@@ -17,8 +18,8 @@ class CollectionsController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Collection::class);
-        $collections = Collection::paginate(10);
-        return $collections;
+        $collections = Collection::get();
+        return CollectionResource::collection($collections);
     }
 
     /**
